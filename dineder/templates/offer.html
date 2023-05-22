@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        {% for product in products.items %}
+        <div class="coll-md-4 m-auto">
+            <div class="card m-2">
+                <img src="{{ url_for('static',filename='pictures/'+product.image) }}" alt="{{ product.name }} class="card-img-top"
+                height="200" width="200">
+                <div class="card-body">
+                    <p class="text-center" style="color: #6f6f6f">{{ product.category }}</p>
+                    <h5 class="text-center">{{ product.name }}</h5>
+                    <p class="text-center">Price {{ product.price }}zł</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('single_page', id=product.id) }}" class="float-left btn btn-sm" style="background-color: #aebdcc; color: #000000; border-radius: 15px">details</a>
+                    <form action="{{ url_for('AddCart') }}" method='post'>
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="btn btn-sm float-right" style="background-color: #2f8eb2; color: #ffffff; border-radius: 15px;" >Add cart</button>
+{#                            <label form="">Quantity</label>#}
+
+                        <input type="hidden" name="quantity" id="" value="1" min="1" max="{{ product.quantity}}">
+                        {% set sizes = product.size.split(',') %}
+{#                            <label form="size">Size:</label>#}
+                        <select name="size" id="sizes" style="visibility: hidden">
+                            {% for size in sizes %}
+                                {% print(size) %}
+                                {% set siz = size.split(',') %}
+                                <option value="{{ siz[0] }}">{{ siz[0]|capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <dic class="col text-center m-auto">
+            {% if products.has_prev %}
+                <a href="{{ url_for('getProduct',page=products.prev_num)}}" class="btn btn-outline-info btn-sm mt-3" >Previous</a>
+            {% endif %}
+            {% if products.total > 4 %}
+            {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1, right_current=2) %}
+                {% if page_num %}
+                    {% if products.page == page_num %}
+                        <a href="{{ url_for('getProduct',page=page_num)}}" class="btn btn-info btn-sm mt-3" > {{ page_num }}</a>
+                    {% else %}
+                        <a href="{{ url_for('getProduct',page=page_num)}}" class="btn btn-outline-info btn-sm mt-3" > {{ page_num }}</a>
+                    {% endif %}
+                {% else %}
+
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            {% if products.has_next %}
+                <a href="{{ url_for('getProduct',page=products.next_num)}}" class="btn btn-outline-info btn-sm mt-3" >Next</a>
+            {% endif %}
+        </dic>
+    </div>
+</div>
+
+{% endblock content%}

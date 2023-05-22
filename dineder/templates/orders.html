@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    {% include '_messages.html' %}
+    <div class="row">
+        <div class="col-md-12">
+        Invoice: {{ orders.invoice }}
+        <br>
+        Status: {{ orders.status }}
+        <br>
+        Customer name: {{ customer.username }}
+        <br>
+        Customer email: {{ customer.email }}
+        <br>
+        <br>
+            <table class="table table-sm">
+                <thead>
+                    <th>Nr</th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Subtotal</th>
+                </thead>
+                <tbody>
+                    {% for key, product in orders.orders.items() %}
+                    <tr>
+                        {% set total =  product.quantity|float * product.price|float %}
+                        <td>{{ loop.index }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.size }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.price }} zł</td>
+                        <td>{{ total  }} zł</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <table class="table table-sm">
+                  <tr>
+                    <td></td>
+                    <td colspan="3"></td>
+                    <td collspan="3"><h5>Grand Total: {{ grandtotal }} zł</h5></td>
+                  </tr>
+
+                <tr>
+                    <td colspan="2">
+
+                        {% if orders.status == 'Paid' %}
+                        {% else %}
+                        <form action="{{ url_for('payment') }}" method="POST">
+                            {% set amount =  grandtotal.replace('.','') %}
+                            <input type="hidden" name="amount" value="{{amount}}">
+                            <input type="hidden" name="invoice" value="{{orders.invoice}}">
+                            <script src="https://checkout.stripe.com/checkout.js"
+                              class="stripe-button"
+                              data-key="pk_test_MaILxTYQ15v5Uhd6NKI9wPdD00qdL0QZSl"
+                              data-name=SKIS
+                              data-description="Ski Geek"
+                              data-amount="{{ amount }}"
+                              data-currency="pln">
+                            </script>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
