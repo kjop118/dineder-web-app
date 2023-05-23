@@ -2,53 +2,211 @@ body {
   background: #EBAC33;
   color: #333333;
   /*margin-top: 5rem;*/
-  font-size: 14px;
-
+  /*font-size: 14px;*/
 }
-
 
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
-.bg-steel {
-  background-color: #FFFFFF;
-}
-
-.bg-steel2 {
-  background-color: #D8F1FF;
-}
-
-
-.navbar-custom .navbar-header .navbar-brand {
-  color: #ffffff;
-  font-family: Alfa Slab One;
-  font-size: 48px;
-  font-weight: bold;
-    text-align: center;
-    justify-content: center;
-  /*position: absolute;*/
-}
-.header-text{
-    color: #000000;
-    font-family: Alfa Slab One;
+.site-header .navbar-brand {
+    color: #ffffff;
+    font-family: 'Rubik Puddles', cursive;
     font-size: 48px;
     font-weight: bold;
+}
+
+.site-header .navbar-brand:hover {
+    color: #e82c3d;
+}
+
+.navbar-nav .nav-item .nav-link {
+    margin-left: 40px;
+    font-family: 'Cantarell', sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    color: #b90b0b;
+}
+
+.nav-link:hover {
+    color: #dddddd;
+}
+
+.login-btn {
+    border-radius: 20px; /* Zaokrąglenie rogów guzika */
+    background-color: #e82c3d; /* Kolor tła guzika */
+    color: white; /* Kolor tekstu w guziku */
+    font-family: 'Cantarell', sans-serif;
+    font-weight: bold;
+}
+.login-btn:hover {
+    background-color: #e85665; /* Kolor tła guzika */
+}
+
+.content-section {
+    display: flex;
+    border-radius: 20px;
+    color: white;
+    margin: 5px;
+}
+
+.logo-section {
+    position: relative;
+    flex: 1;
     text-align: center;
+}
+/*.logo-section img {*/
+/*      !*max-width: 100%;*!*/
+/*      !*height: auto;*!*/
+/*    border-radius: 20px;*/
+/*}*/
+
+.company-name {
+    font-family: 'Neucha', cursive;
+    font-size: 80px;
+    color: #EBAC33;
+    font-weight: bold;
+    /*color: #edfdfd;*/
+}
+
+.image-section img {
+    flex: 1;
+    border-radius: 20px;
+}
+
+.match-button {
+    display: grid;
+    place-items: center;
+}
+.match-btn {
+    display: inline-block;
+    border-radius: 30px;
+    border: 8px solid white;
+    background-color: #EBAC33; /* Kolor tła guzika */
+    color: white; /* Kolor tekstu w guziku */
+    font-size: 40px;
+    font-family: 'Neucha', cursive;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.match-btn:hover {
+    background-color: #e7a41f; /* Kolor tła guzika */
+    border: 8px solid #c2bfbf;
+    color: #c2bfbf;
+}
+
+.match-button .arrow-img {
+    text-align: center;
+}
+.arrow-img img {
+    display: block;
+}
+
+.custom-text-about{
+    width: 100%;
+    height: auto;
+    position: relative;
+    margin-top: 5px;
+    text-align: center;
+    font-family: 'Neucha', cursive;
+    font-weight: bold;
+    font-size: 40px;
+    color: #ffffff;
+    text-shadow: 1px 1px 5px #691414;
+    /*text-transform: uppercase;*/
+}
+
+
+
+.left-div {
+    position: relative;
+    flex: 1;
+    float: left;
+    text-align: right;
+    margin-left: 100px;
+}
+
+.content-text-about {
+    font-family: 'Neucha', cursive;
+    color: #000000;
+    /*background-color: #ffffff;*/
+    /*border-radius: 20px;*/
+    /*border: 5px solid rgba(134, 128, 128, 0.18);*/
+    display: flex;
     justify-content: center;
-  /*position: absolute;*/
+    padding: 40px;
+    text-align: right;
+    font-size: 20px;
 }
 
-
-
-.main-text-color{
-  color: #000000;
+.right-div {
+    float: right;
+    text-align: left;
+    margin-right: 100px;
+}
+.logo-section-about {
+    height: 150%;
+    width: auto;
 }
 
-.row .coll-md-8{
+.contact-us .info {
+    font-family: 'Neucha', cursive;
     text-align: center;
-    position: center;
+    font-size: 30px;
+    font-weight: bold;
 }
+
+.contact-us .number {
+    font-family: 'Neucha', cursive;
+    text-align: center;
+    font-size: 25px;
+    color: #dddddd;
+}
+
+/*.site-header .col-lg-4 .navbar-header .navbar-brand {*/
+/*    color: #ffffff;*/
+/*    font-family: 'Rubik Puddles', cursive;*/
+/*    font-size: 48px;*/
+/*}*/
+/*.bg-steel {*/
+/*  background-color: #FFFFFF;*/
+/*}*/
+
+/*.bg-steel2 {*/
+/*  background-color: #D8F1FF;*/
+/*}*/
+
+
+/*.navbar-custom .navbar-header .navbar-brand {*/
+/*  color: #ffffff;*/
+/*  font-family: Alfa Slab One;*/
+/*  font-size: 48px;*/
+/*  font-weight: bold;*/
+/*    text-align: center;*/
+/*    justify-content: center;*/
+/*  !*position: absolute;*!*/
+/*}*/
+/*.header-text{*/
+/*    color: #000000;*/
+/*    font-family: Alfa Slab One;*/
+/*    font-size: 48px;*/
+/*    font-weight: bold;*/
+/*    text-align: center;*/
+/*    justify-content: center;*/
+/*  !*position: absolute;*!*/
+/*}*/
+
+
+
+/*.main-text-color{*/
+/*  color: #000000;*/
+/*}*/
+
+/*.row .coll-md-8{*/
+/*    text-align: center;*/
+/*    position: center;*/
+/*}*/
   /*<main role="main" class="container">*/
 
 
@@ -64,12 +222,12 @@ h1, h2, h3, h4, h5, h6 {
 /*    !*background: white;*!*/
 /*    padding: 10px;*/
 /*}*/
-.site-header .navbar-nav .nav-link {
-    color: #2b235b;
-    font-family: Alfa Slab One;
-    font-weight: 800;
-    font-size: 20px;
-}
+/*.site-header .navbar-nav .nav-link {*/
+/*    color: #2b235b;*/
+/*    font-family: Alfa Slab One;*/
+/*    font-weight: 800;*/
+/*    font-size: 10px;*/
+/*}*/
 
 /*.site-header .navbar-brand {*/
 /*    color: #2b235b;*/
@@ -80,18 +238,18 @@ h1, h2, h3, h4, h5, h6 {
 
 
 
-.site-header .navbar-nav .nav-link:hover {
-  color: #7082be;
-}
+/*.site-header .navbar-nav .nav-link:hover {*/
+/*  color: #ffffff;*/
+/*}*/
 
-/*nie potrzebne to jest*/
-.site-header .navbar-nav .nav-link.active {
-  font-weight: 500;
-}
+/*!*nie potrzebne to jest*!*/
+/*.site-header .navbar-nav .nav-link.active {*/
+/*  font-weight: 500;*/
+/*}*/
 
-.navbar .navbar-collapse {
-  text-align: center;
-}
+/*.navbar .navbar-collapse {*/
+/*  text-align: center;*/
+/*}*/
 
 
 .main-text-section {
@@ -141,18 +299,7 @@ h1, h2, h3, h4, h5, h6 {
     /*text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;*/
 }
 
-.custom-text-about{
-    width: 100%;
-    height: auto;
-    position: relative;
-    margin-top: 5px;
-    text-align: center;
-    font-family: Alfa Slab One;
-    font-weight: bold;
-    font-size: 40px;
-    color: #ffffff;
-    text-shadow: 1px 1px 5px #000000;
-}
+
 
 
 .custom-text-opinions{
@@ -186,21 +333,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: auto;
 }
 
-.content-text {
 
-    width: 100%;
-    height: auto;
-
-  background-color: #ffffff;
-  border-radius: 20px;
-  border: 5px solid rgba(134, 128, 128, 0.18);
-  display: flex;
-  justify-content: center;
-  padding: 40px;
-  text-align: center;
-  font-size: 15px;
-
-}
 
 
 

@@ -7,9 +7,15 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cantarell&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Neucha&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="static/pictures/dineder-icon.png">
     {%  if title %}
         <title>Dineder - {{ title }}</title>
     {% else %}
@@ -18,16 +24,50 @@
 </head>
 <body>
      <header class="site-header">
-        <div class="col-md-4">
-            <div class="navbar-header">
-                <a class="navbar-brand mr-4 nav-link " href="/">DINEDER</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </div>
+         <nav class="navbar navbar-expand-lg navbar-light">
+             <a class="navbar-brand" href="/">DINEDER</a>
+             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+             </button>
 
+             <div class="collapse navbar-collapse " id="navbarNav">
+                 <ul class="navbar-nav mr-auto">
+                     <li class="nav-item">
+                         <a class="nav-link" href="/about">ABOUT</a>
+                     </li>
+                     <li class="nav-item">
+                         <a class="nav-link" href="/">MATCH</a>
+                     </li>
+                 </ul>
+             </div>
+
+<!--             <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--                 <ul class="navbar-nav ml-auto">-->
+             <a class="nav-link favourite-restaurants" href="#">
+                  <img src="{{ url_for('static', filename='pictures/heart.png') }}" alt="likeIT">
+             </a>
+             <a class="nav-link user-account" href="#">
+                  <img src="{{ url_for('static', filename='pictures/codicon_account.png') }}" alt="account">
+             </a>
+
+             <a href="/login" class="btn login-btn">LOGIN</a>
+        </nav>
      </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer fixed-bottom" style="background-color: #da7b30; color: #dddddd; font-family: 'Neucha', cursive;">
+    <div class="container" >
+      <div class="row" style="margin-top: 5px">
+        <div class="col-md-6">
+          <p>DINDER - Match your best restaurant</p>
+        </div>
+        <div class="col-md-6">
+          <p class="text-md-right">Copyright &copy; 2023. Wszelkie prawa zastrzeżone.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

@@ -1,61 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <div class="content">
-        <div class="row">
-            <div class="main-image">
-                <img src="static/pictures/mountain.png" alt="mountain">
-                <div class="centered">
-                    <p>Feel free to SKI</p>
-                    <a href="{{ url_for('getProduct')}}">
-                        <button class="btn custom-button" style="background-color: #ecf0f3;border-radius: 20px;color: #000000; text-weight:bold; box-shadow: 0px 0px 2px 2px rgb(176,168,168); border: none" >
-                            Check our offer
-                        </button>
-                    </a>
-                </div>
-            </div>
+    <div class="content-section" style="background-color: white">
+        <div class="logo-section">
+          <img src="static/pictures/dineder-icon.png" alt="=logo" />
+          <span class="company-name">DINDER</span>
+        </div>
+        <div class="image-section">
+          <img src="static/pictures/restaurant.png" alt="restaurant" />
         </div>
     </div>
 
-    <div class="comment-content">
-        <div class="row">
-            <div class="custom-text-opinions">
-                <p class="border-bottom">Users opinions</p>
-
-                <a href="{{ url_for('new_post') }}">
-                    <button style="font-size: 20px; border: none; border-radius: 15px; background-color: #2ea2ce; color: #ffffff; padding: 6px">Add comment</button>
-                </a>
-            </div>
-
-
-
-        {% for post in posts %}
-            <div class="comment-details">
-                <article class="media content-section">
-                  <div class="media-body">
-                    <div class="article-metadata">
-                      <a class="mr-2" href="#">{{ post.author.username }}</a>
-                      <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
-                    </div>
-                      {% if current_user.is_authenticated %}
-                          {% if current_user.username == post.author.username %}
-                            <h2><a class="article-title" href="{{ url_for('updatePost', post_id=post.id) }}">{{ post.title }}</a></h2>
-                          {% else %}
-                              <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-                          {% endif %}
-                    {% else %}
-                           <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-                      {% endif %}
-                    <p class="article-content">{{ post.content }}</p>
-                  </div>
-                </article>
-            </div>
-        {% endfor %}
+    <div class="match-button">
+        <button class="btn match-btn">Find your MATCH</button>
+        <div class="arrow-img">
+            <img src="static/pictures/arrow.png" alt="restaurant" />
+            <img src="static/pictures/arrow.png" alt="restaurant" />
+            <img src="static/pictures/arrow.png" alt="restaurant" />
+        </div>
     </div>
 
-{#    {% for post in posts %}#}
-{#        <h1>{{ post.title }}</h1>#}
-{#        <p>By {{ post.author }} on {{ post.date_posted }}</p>#}
-{#        <p> {{ post.content }}</p>#}
-{#    {% endfor %}#}
 {% endblock content%}
