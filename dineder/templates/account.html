@@ -1,166 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
-{#    <h1>{{ current_user.username }}</h1>#}
-    <div class="content-section">
+{#  <h1>{{ current_user.username }}</h1>#}
+    <div class="content-account">
 
-        <div class="row">
-            <div class="media">
-    {#            <img class="rounded-circle account-img" src={{ image_file }}>#}
-                <div class="media-body">
-                    <h2 class="account-heading">{{ current_user.username }}</h2>
-                    <p class="text-secondary">{{ current_user.email }}</p>
-                </div>
+        <div class="account-info">
+            <div class="account-image">
+                <img class="rounded-circle" src="{{ url_for('static', filename='pictures/majk.jpg') }}">
+            </div>
+            <div class="account-txt">
+                <p class="account-name">{{ current_user.name }} {{ current_user.surname }}</p>
+                <p class="account-email">{{ current_user.email }}</p>
             </div>
         </div>
 
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Account Info</legend>
-                <div class="form-group">
-                    {{ form.username.label(class="form-control-label") }}
 
-                    {% if form.username.errors %}
-                        {{ form.username(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.username.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.username(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+        <div class="preferences">
+            <div class="filters">
+                <p class="fav-filters">Saved filters</p>
             </div>
-        </form>
-
-        <div class="content">
-            <legend class="border-bottom mb-4 mt-4">User Orders</legend>
-
-            {% for order in orders %}
-
-                <table class="table custom-table table-sm">
-                    <h6>Order date: </h6>{{ order.date_created.strftime('%Y-%m-%d %H:%M:%S') }}
-                    <h6>Status: </h6> {{ order.status }}
-
-                    <thead>
-                        <th>Nr</th>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Subtotal</th>
-                    </thead>
-
-                    <tbody>
-                      {% for key, product in order.orders.items() %}
-                        <tr>
-                            {% set subtotal =  product.quantity|float * product.price|float %}
-                            <td>{{ loop.index }}</td>
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.size }}</td>
-                            <td>{{ product.quantity }}</td>
-                            <td>{{ product.price }} zł</td>
-                            <td>{{ subtotal }} zł</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-
-                <div class="row">
-                    <div class="col-md-10 float-left">
-                        <h5>Grand total: {{ order.grandtotal }} zł</h5>
-                    </div>
-
-                    <div class="col-md-2 float-right">
-                        {% if order.status == 'Pending' %}
-                            <a href="{{ url_for('orders', invoice=order.invoice) }}">
-                                <button type="submit" class="btn btn-sm btn-info">
-                                    Check out
-                                </button>
-                            </a>
-                        {% else %}
-                             <a href="{{ url_for('return_order', invoice=order.invoice) }}">
-                                <button type="submit" class="btn btn-sm btn-info" style="background-color: #813d81; color: #ffffff; border: none">
-                                    Return
-                                </button>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <br>
-                <hr>
-            {% endfor %}
-
-
-
-        </div>
-
-
-
-         <div class="content">
-            <legend class="border-bottom mb-4 mt-4">User Tickets</legend>
-
-            {% for ticket in customer_tickets %}
-                <table class="table custom-table table-sm">
-                    <h6>Order date: </h6>{{ ticket.date_created.strftime('%Y-%m-%d %H:%M:%S') }}
-                    <h6>Status: </h6> {{ ticket.status }}
-
-                    <thead>
-                        <th>Ski Pass</th>
-                        <th>Time/Ride amout</th>
-                        <th>Type</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                           <td>{{ ticket['ski_pass'] }}</td>
-                            <td>{{ ticket['amount']}}</td>
-                            <td>{{ ticket['type']}}</td>
-                            <td style="color:#8840be;">{{ ticket['price'] }} zł</td>
-                            <td>{{ ticket['quantity'] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="row">
-                    <div class="col-md-10 float-left">
-                        <h5>Grand total: {{ ticket.grandtotal }} zł</h5>
-                    </div>
-
-                    <div class="col-md-2 float-right">
-                        {% if ticket.status == 'Pending' %}
-                            <a href="{{ url_for('ticket_orders', invoice=ticket.invoice) }}">
-                                <button type="submit" class="btn btn-sm btn-info">
-                                    Check out
-                                </button>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <br>
-                <hr>
-            {% endfor %}
         </div>
 
     </div>

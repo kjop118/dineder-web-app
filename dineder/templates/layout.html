@@ -36,7 +36,7 @@
                          <a class="nav-link" href="/about">ABOUT</a>
                      </li>
                      <li class="nav-item">
-                         <a class="nav-link" href="/">MATCH</a>
+                         <a class="nav-link" href="/match-restaurant">MATCH</a>
                      </li>
                  </ul>
              </div>
@@ -44,10 +44,10 @@
 <!--             <div class="collapse navbar-collapse" id="navbarNav">-->
 <!--                 <ul class="navbar-nav ml-auto">-->
              {% if current_user.is_authenticated %}
-                 <a class="nav-link favourite-restaurants" href="#">
+                 <a class="nav-link favourite-restaurants" href="/favourite">
                       <img src="{{ url_for('static', filename='pictures/heart.png') }}" alt="likeIT">
                  </a>
-                 <a class="nav-link user-account" href="#">
+                 <a class="nav-link user-account" href="/account">
                       <img src="{{ url_for('static', filename='pictures/codicon_account.png') }}" alt="account">
                  </a>
                  <a href="/logout" class="btn logout-btn">LOGOUT</a>
@@ -63,7 +63,7 @@
     <div class="container" >
       <div class="row" style="margin-top: 5px">
         <div class="col-md-6">
-          <p>DINDER - Match your best restaurant</p>
+          <p>DINEDER - Match your best restaurant</p>
         </div>
         <div class="col-md-6">
           <p class="text-md-right">Copyright &copy; 2023. Wszelkie prawa zastrzeżone.</p>

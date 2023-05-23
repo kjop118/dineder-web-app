@@ -41,6 +41,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 .login-btn:hover {
     background-color: #e85665; /* Kolor tła guzika */
+    color: white;
+}
+
+.logout-btn {
+    border-radius: 20px; /* Zaokrąglenie rogów guzika */
+    background-color: #c46500; /* Kolor tła guzika */
+    color: white; /* Kolor tekstu w guziku */
+    font-family: 'Cantarell', sans-serif;
+    font-weight: bold;
+}
+.logout-btn:hover {
+    background-color: #cb7b2c; /* Kolor tła guzika */
+    color: white;
 }
 
 .content-section {
@@ -55,11 +68,6 @@ h1, h2, h3, h4, h5, h6 {
     flex: 1;
     text-align: center;
 }
-/*.logo-section img {*/
-/*      !*max-width: 100%;*!*/
-/*      !*height: auto;*!*/
-/*    border-radius: 20px;*/
-/*}*/
 
 .company-name {
     font-family: 'Neucha', cursive;
@@ -101,6 +109,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 .arrow-img img {
     display: block;
+}
+
+.fries-gif {
+    text-align: center;
+}
+.fryty-img img {
+    border-radius: 50px;
+    margin-top: 1000px;
+    margin-bottom: 60px;
 }
 
 .custom-text-about{
@@ -203,6 +220,157 @@ h1, h2, h3, h4, h5, h6 {
 .btn-outline-info:hover {
     background-color: #e85665;
 }
+
+.account-info {
+    display: flex;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.account-image {
+    position: relative;
+    flex: 1;
+    float: left;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.account-txt {
+    flex: 1;
+    float: right;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.account-image img{
+  height: 200px;
+  width: 200px;
+}
+
+.account-txt .account-name{
+    flex: 1;
+    font-family: 'Neucha', cursive;
+    font-size: 30px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.account-txt .account-email{
+    flex: 1;
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+    color: #a91c1c;
+    font-weight: bold;
+}
+
+.preferences {
+    margin-top: 50px;
+}
+
+.fav-filters {
+    font-family: 'Neucha', cursive;
+    margin-left: 20px;
+    font-size: 40px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.restaurants {
+    font-family: 'Neucha', cursive;
+    margin-left: 20px;
+    font-size: 40px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/*.container-match {*/
+/*    display: flex;*/
+/*    text-align: center;*/
+/*    margin-top: 20px;*/
+/*}*/
+
+.filters {
+    margin: 20px;
+}
+
+.cousine-content {
+    margin-top: 10px;
+}
+.cousine-txt {
+    flex: 1;
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+    color: #a91c1c;
+    font-weight: bold;
+}
+.cousine {
+    height: 40px;
+    width: 300px;
+    border-radius: 20px;
+    text-align: center;
+}
+.cousine-weight {
+    height: 40px;
+    width: 50px;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.price-content {
+    margin-top: 10px;
+}
+
+.price-txt {
+    flex: 1;
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+    color: #a91c1c;
+    font-weight: bold;
+
+}
+.price {
+    height: 40px;
+    width: 300px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.rating-content {
+    margin-top: 10px;
+}
+
+.ratings-txt {
+    flex: 1;
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+    color: #a91c1c;
+    font-weight: bold;
+}
+.ratings {
+    height: 40px;
+    width: 300px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.distance-content {
+    margin-top: 10px;
+}
+
+.distance-txt {
+    flex: 1;
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+    color: #a91c1c;
+    font-weight: bold;
+}
+.distance {
+    height: 40px;
+    width: 300px;
+    border-radius: 20px;
+    text-align: center;
+}
+
 
 /*.site-header .navbar-brand {*/
 /*    color: #2b235b;*/
@@ -517,12 +685,7 @@ a.article-title:hover {
   vertical-align: middle;
 }
 
-.account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
-}
+
 
 .account-heading {
   font-size: 2.5rem;

@@ -5,11 +5,7 @@ from dineder import app, db, bcrypt, search
 from dineder.forms import RegistrationForm, LoginForm #, UpdateAccountForm, ProductForm, PostForm
 from dineder.models import Users
 from flask_login import login_user, current_user, logout_user, login_required
-import stripe
 
-# publishable_key = 'pk_test_51LDow7HzCBPomSPtpCIraRVdErr2zpLEvGYGortt1js5KKNKDFRj8tCWABvxSMLwQxIlrIV5yjwZ2ifGRGnVkOJi00uFhGj9wV'
-# stripe.api_key = 'sk_test_51LDow7HzCBPomSPtAA4N5ZiPfZRwQ5s2XwUj1HenYNNUNs0nGtXa3cYZ0xQCXKz8AtECpkZ8kjUjvwgfg43WyFPs00H9UQhNDE'
-#
 @app.route("/")
 @app.route("/home")
 def home():
@@ -59,6 +55,45 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+@app.route("/account", methods=['GET', 'POST'])
+@login_required
+def account():
+    return render_template('account.html', title='Account')
+
+@app.route("/favourite", methods=['GET', 'POST'])
+@login_required
+def getFavRestaurant():
+    return render_template('fav-restaurant.html', title='LIKE')
+
+@app.route("/match-restaurant", methods=['GET', 'POST'])
+def getYourMatch():
+    return render_template('match.html', title='MATCH')
+
+
+
+# @app.route("/account", methods=['GET', 'POST'])
+# @login_required
+# def account():
+#     customer_id = current_user.id
+#     customer = User.query.filter_by(id=customer_id).first()
+#     orders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc())
+#     customer_tickets = CustomerTicket.query.filter_by(customer_id=customer_id).order_by(CustomerTicket.id.desc())
+#
+#     form = UpdateAccountForm()
+#     if form.validate_on_submit():
+#         current_user.username = form.username.data
+#         current_user.email = form.email.data
+#         db.session.commit()
+#         flash('Account has been updated!', 'success')
+#         return redirect(url_for('account'))
+#     elif request.method == 'GET':
+#         form.username.data = current_user.username
+#         form.email.data = current_user.email
+#     # image_file = url_for('static', filename='profile_pics/'+current_user.image_file)
+#     # return render_template('account.html', title='Account', image_file=image_file)
+#     return render_template('account.html', title='Account', form=form, customer=customer, orders=orders, customer_tickets=customer_tickets)
+
 
 # @app.route("/account", methods=['GET', 'POST'])
 # @login_required
@@ -281,7 +316,7 @@ def logout():
 # def result():
 #     searchword = request.args.get('q')
 #     products = Product.query.msearch(searchword, fields=['name','description'])
-#     return render_template('result.html',products=products)
+#     return render_template('fav-restaurant.html',products=products)
 #
 #
 # #
