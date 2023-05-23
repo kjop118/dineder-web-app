@@ -12,9 +12,9 @@
                 <span class="cousine-txt">COUSINE</span>
                 <select class="cousine">
                   <option value="">Wybierz kuchnię</option>
-                  <option value="opcja1">Opcja 1</option>
-                  <option value="opcja2">Opcja 2</option>
-                  <option value="opcja3">Opcja 3</option>
+                  <option value="włoska">włoska</option>
+                  <option value="polska">polska</option>
+                  <option value="japońska">japońska</option>
                 </select>
 
                 <select class="cousine-weight">
@@ -28,9 +28,9 @@
             </div>
 
             <div class="price-content">
-                <span class="cousine-txt">COUSINE</span>
+                <span class="cousine-txt">PRICE RANGE</span>
                 <select class="price">
-                  <option value="">PRICE RANGE</option>
+                  <option value="">Wybierz zakres cenowy</option>
                   <option value="opcja1">Opcja 1</option>
                   <option value="opcja2">Opcja 2</option>
                   <option value="opcja3">Opcja 3</option>
@@ -57,6 +57,16 @@
                 </select>
             </div>
         </div>
+
+        {% if current_user.is_authenticated %}
+        <div class="save-filters">
+            <button class="btn btn-save">SAVE</button>
+        </div>
+        {% else %}
+        <div class="save-filters">
+            <a href="/login" class="btn btn-save">SAVE</a>
+        </div>
+        {% endif %}
 
     </div>
 {% endblock content%}
