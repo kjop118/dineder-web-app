@@ -23,14 +23,6 @@ mydb = mysql.connector.connect(
 # MYSQL_ADDON_URI=mysql://u9gff7om6scemu0o:uEkd3YF6kHfcUkrFQeMP@br5qeuqmq0vt0kswckki-mysql.services.clever-cloud.com:3306/br5qeuqmq0vt0kswckki
 
 
-print("TEST DB")
-print(mydb)
-
-mycursor = mydb.cursor()
-
-# mycursor.execute('INSERT into users value (1,"Janusz", "Kowalski", "janusz@email.com", "haslojanusza")')
-# print(mycursor.execute("SELECT * from users"))
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://u9gff7om6scemu0o:uEkd3YF6kHfcUkrFQeMP@br5qeuqmq0vt0kswckki-mysql.services.clever-cloud.com:3306/br5qeuqmq0vt0kswckki'

@@ -7,7 +7,7 @@
                     <span class="info-label">PARAMETERS</span>
                 </div>
                 <div class="parameters-label">
-                    <p class="labels-txt">COUSINE</p>
+                    <p class="labels-txt">CUISINE</p>
                     <p class="labels-txt">PRICE RANGE</p>
                     <p class="labels-txt">RATINGS</p>
                     <p class="labels-txt">DISTANCE</p>
@@ -25,37 +25,47 @@
                 </div>
                 <div class="row filters-params-row">
                     <div class="col d-flex flex-column align-items-center filters-params">
-                        <select class="cousine">
-                          <option value="">Wybierz kuchnię</option>
-                          <option value="włoska">włoska</option>
-                          <option value="polska">polska</option>
-                          <option value="japońska">japońska</option>
+                        <select class="cuisine">
+                          <option value="other">Wybierz kuchnię</option>
+                            {% for cuisine in cuisines %}
+                                <option value="{{ cuisine }}">{{ cuisine['cuisine'] }}</option>
+                            {% endfor %}
                         </select>
 
                         <select class="price">
-                          <option value="">Wybierz zakres cenowy</option>
-                          <option value="opcja1">Opcja 1</option>
-                          <option value="opcja2">Opcja 2</option>
-                          <option value="opcja3">Opcja 3</option>
+                            <option value="other">Wybierz zakres cenowy</option>
+                            <option value="20">do 20</option>
+                            <option value="40">do 40</option>
+                            <option value="60">do 60</option>
+                            <option value="80">do 80</option>
+                            <option value="100">do 100</option>
+                            <option value="150">do 150</option>
+                            <option value="200">do 200</option>
+                            <option value="other">powyżej 200</option>
                         </select>
 
                         <select class="ratings">
-                          <option value="">Wybierz ocenę</option>
-                          <option value="opcja1">Opcja 1</option>
-                          <option value="opcja2">Opcja 2</option>
-                          <option value="opcja3">Opcja 3</option>
+                            <option value="other">Wybierz ocenę</option>
+                            <option value="1.0">1.0</option>
+                            <option value="2.0">2.0</option>
+                            <option value="3.0">3.0</option>
+                            <option value="4.0">4.0</option>
+                            <option value="5.0">5.0</option>
                         </select>
 
                         <select class="distance">
-                          <option value="">Wybierz odległość</option>
-                          <option value="opcja1">Opcja 1</option>
-                          <option value="opcja2">Opcja 2</option>
-                          <option value="opcja3">Opcja 3</option>
+                            <option value="other">Wybierz odległość</option>
+                            <option value="2.0">do 2km</option>
+                            <option value="5.0">do 5km</option>
+                            <option value="8.0">do 8km</option>
+                            <option value="10.0">do 10km</option>
+                            <option value="15.0">do 15km</option>
+                            <option value="other">powyżej 15km</option>
                         </select>
                     </div>
 
                     <div class="col d-flex flex-column align-items-center weight-column">
-                        <select class="cousine-weight">
+                        <select class="cuisine-weight">
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
@@ -107,7 +117,26 @@
             <button id="showCarousel" class="btn btn-find">MATCH</button>
         </div>
 
+        <div class="find-restaurant">
+            <form id="matchForm" method="POST" action="">
+                <select name="wybrane_opcje">
+                  <option value="opcja1">Opcja 1</option>
+                  <option value="opcja2">Opcja 2</option>
+                  <option value="opcja3">Opcja 3</option>
+                </select>
 
+                <input  name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+
+                <button id="match" type="submit" class="btn btn-find">MATCH</button>
+
+            </form>
+
+        </div>
+
+
+        <h1>Udostępnij lokalizację</h1>
+    <button onclick="getLocation()">Pobierz lokalizację</button>
 
 
 <!--        karuzela wiiiiiiiiiiiiiiii-->
@@ -149,8 +178,6 @@
           </a>
         </div>
 
-        <h1>Udostępnij lokalizację</h1>
-    <button onclick="getLocation()">Pobierz lokalizację</button>
 
         <script type="text/javascript">
             const btn = document.getElementById('showCarousel');
@@ -164,46 +191,48 @@
         </script>
 
         <script>
-            function getLocation() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(showPosition, showError, {
-                        enableHighAccuracy: true
+              $(document).ready(function() {
+                  $('#matchForm').submit(function(event) {
+                    event.preventDefault(); // Zapobieganie domyślnemu zachowaniu formularza
+
+                    // Pobranie wybranych filtrów
+                    var filters = [];
+                    $('input[name="filter"]:checked').each(function() {
+                      filters.push($(this).val());
                     });
-                } else {
-                    alert("Twoja przeglądarka nie obsługuje Geolokalizacji.");
-                }
-            }
 
-            function showPosition(position) {
-                var latitude = position.coords.latitude;
-                var longitude = position.coords.longitude;
-                var accuracy = position.coords.accuracy;
+                    // Pobranie lokalizacji użytkownika
+                    if (navigator.geolocation) {
+                      navigator.geolocation.getCurrentPosition(function(position) {
+                        var latitude = position.coords.latitude;
+                        var longitude = position.coords.longitude;
 
-                // Wyświetlenie informacji o lokalizacji
-                var message = "Twoja aktualna lokalizacja:\n";
-                message += "Szerokość geograficzna: " + latitude + "\n";
-                message += "Długość geograficzna: " + longitude + "\n";
-                message += "Dokładność: " + accuracy + " metrów";
-
-                alert(message);
-            }
-
-            function showError(error) {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        alert("Użytkownik nie udostępnił lokalizacji.");
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert("Informacje o lokalizacji są niedostępne.");
-                        break;
-                    case error.TIMEOUT:
-                        alert("Przekroczono limit czasu oczekiwania na lokalizację.");
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        alert("Wystąpił nieznany błąd podczas pobierania lokalizacji.");
-                        break;
-                }
-            }
+                        // Wysłanie danych do serwera za pomocą AJAX
+                        $.ajax({
+                          type: 'POST',
+                          url: '/match',
+                          data: {
+                            filter: filters,
+                            latitude: latitude,
+                            longitude: longitude
+                          },
+                          success: function(response) {
+                            // Obsługa odpowiedzi serwera
+                            var results = response.results;
+                            // Wyświetlenie karuzeli z wynikami
+                            // Tutaj umieść kod do wyświetlenia karuzeli na stronie
+                            $('#karuzela').html('Karuzela z wynikami');
+                          },
+                          error: function() {
+                            alert('Wystąpił błąd podczas pobierania wyników.');
+                          }
+                        });
+                      });
+                    } else {
+                      alert('Twoja przeglądarka nie obsługuje Geolocation API.');
+                    }
+                  });
+                });
         </script>
     </div>
 {% endblock content%}

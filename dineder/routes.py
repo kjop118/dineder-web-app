@@ -1,10 +1,10 @@
-import secrets
-
-from flask import render_template, url_for, flash, redirect, request, session
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from dineder import app, db, bcrypt
 from dineder.forms import RegistrationForm, LoginForm
-from dineder.models import Users
+from dineder.models import Users, Restaurants, Cuisines
 from flask_login import login_user, current_user, logout_user, login_required
+import numpy as np
+from geopy.distance import geodesic
 
 @app.route("/")
 @app.route("/home")
@@ -68,506 +68,106 @@ def getFavRestaurant():
 
 @app.route("/match-restaurant", methods=['GET', 'POST'])
 def getYourMatch():
-    return render_template('match.html', title='MATCH')
+    cuisines = Cuisines.query.all()
+    cuisine = Cuisines.query.get(10)
+    print(cuisine)
+    # restaurants_db = Restaurants.query.all()
+    # restaurants_all = []
+    #
+    # for restaurant in restaurants_db:
+    #     restaurants_all.append({'id': restaurant.id, 'name': restaurant.rest_name, 'online_order': restaurant.online_order,
+    #                         'book_table': restaurant.book_table, 'rating': restaurant.rate, 'votes': restaurant.votes,
+    #                         'price_range': restaurant.cost, 'rest_location': restaurant.rest_location,
+    #                         'location': (restaurant.latitude, restaurant.longitude)})
+    #
+    # for restaurant in restaurants_all:
+    #     print(restaurant['name'])
+
+    if request.method == 'POST' and 'match' in request.form:
+        wybrane_opcje = request.form.getlist('wybrane_opcje')
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+
+        results = latitude
+        print(latitude)
+        print(longitude)
+        return jsonify(results=results)
+
+
+    return render_template('match.html', title='MATCH', cuisines = cuisines)
 
 
 
-# @app.route("/account", methods=['GET', 'POST'])
-# @login_required
-# def account():
-#     customer_id = current_user.id
-#     customer = User.query.filter_by(id=customer_id).first()
-#     orders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc())
-#     customer_tickets = CustomerTicket.query.filter_by(customer_id=customer_id).order_by(CustomerTicket.id.desc())
-#
-#     form = UpdateAccountForm()
-#     if form.validate_on_submit():
-#         current_user.username = form.username.data
-#         current_user.email = form.email.data
-#         db.session.commit()
-#         flash('Account has been updated!', 'success')
-#         return redirect(url_for('account'))
-#     elif request.method == 'GET':
-#         form.username.data = current_user.username
-#         form.email.data = current_user.email
-#     # image_file = url_for('static', filename='profile_pics/'+current_user.image_file)
-#     # return render_template('account.html', title='Account', image_file=image_file)
-#     return render_template('account.html', title='Account', form=form, customer=customer, orders=orders, customer_tickets=customer_tickets)
+def getMatchedRestaurants(user_location, weights, ):
+    user_location = (51.5074, -0.1278)  # Przykładowa lokalizacja użytkownika (Londyn)
+    restaurants_db = Restaurants.query.all()
+    restaurants_all = []
 
+    for restaurant in restaurants_db:
+        restaurants_all.append({'id': restaurant.id, 'name': restaurant.rest_name, 'online_order': restaurant.online_order,
+                            'book_table': restaurant.book_table, 'rating': restaurant.rate, 'votes': restaurant.votes,
+                            'price_range': restaurant.cost, 'rest_location': restaurant.rest_locatio,
+                            'location': (restaurant.latitude, restaurant.longitude)})
 
-# @app.route("/account", methods=['GET', 'POST'])
-# @login_required
-# def account():
-#     customer_id = current_user.id
-#     customer = User.query.filter_by(id=customer_id).first()
-#     orders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc())
-#     customer_tickets = CustomerTicket.query.filter_by(customer_id=customer_id).order_by(CustomerTicket.id.desc())
-#
-#     form = UpdateAccountForm()
-#     if form.validate_on_submit():
-#         current_user.username = form.username.data
-#         current_user.email = form.email.data
-#         db.session.commit()
-#         flash('Account has been updated!', 'success')
-#         return redirect(url_for('account'))
-#     elif request.method == 'GET':
-#         form.username.data = current_user.username
-#         form.email.data = current_user.email
-#     # image_file = url_for('static', filename='profile_pics/'+current_user.image_file)
-#     # return render_template('account.html', title='Account', image_file=image_file)
-#     return render_template('account.html', title='Account', form=form, customer=customer, orders=orders, customer_tickets=customer_tickets)
+    restaurants = [
+        {'name': 'Restauracja A', 'cuisine': 'Włoska', 'price_range': 3, 'rating': 4.2, 'location': (51.5115, -0.1160)},
+        {'name': 'Restauracja B', 'cuisine': 'Meksykańska', 'price_range': 2, 'rating': 3.8,
+         'location': (51.5033, -0.1195)},
+        {'name': 'Restauracja C', 'cuisine': 'Francuska', 'price_range': 4, 'rating': 4.5,
+         'location': (51.5067, -0.1340)},
+        # ... Dodaj więcej restauracji
+    ]
 
+    w1 = 3  # Waga dla kryterium Rodzaj kuchni
+    w2 = 2  # Waga dla kryterium Zakres cenowy
+    w3 = 4  # Waga dla kryterium Ocena
+    w4 = 5  # Waga dla kryterium Dystans
+    max_distance_allowed = 5  # Maksymalny dozwolony dystans od użytkownika (w kilometrach)
 
+    # Obliczanie odległości użytkownika od restauracji
+    distances = []
+    for restaurant in restaurants:
+        restaurant_location = restaurant['location']
+        distance = geodesic(user_location, restaurant_location).km
+        distances.append(distance)
 
+    # Normalizacja odległości
+    max_distance = max(distances)
+    normalized_distances = [distance / max_distance for distance in distances]
 
+    # Macierz porównań
+    comparison_matrix = np.array([
+        [1, w1, w2, w3],  # Rodzaj kuchni
+        [1 / w1, 1, w4, w4],  # Zakres cenowy
+        [1 / w2, 1 / w4, 1, w4],  # Ocena
+        [1 / w3, 1 / w4, 1 / w4, 1]  # Dystans
+    ])
 
-# @app.route('/payment', methods = ['POST'])
-# @login_required
-# def payment():
-#     invoice = request.form.get('invoice')
-#     amount = request.form.get('amount')
-#     print(amount)
-#
-#     customer = stripe.Customer.create(
-#         email = request.form['stripeEmail'],
-#         source = 'tok_visa'
-#     )
-#
-#     charge = stripe.Charge.create(
-#         customer = customer.id,
-#         description = 'Ski Geek',
-#         amount = amount,
-#         currency = 'pln'
-#     )
-#
-#     orders = CustomerOrder.query.filter_by(customer_id=current_user.id).order_by(CustomerOrder.id.desc()).first()
-#     orders.status = 'Paid'
-#     db.session.commit()
-#     return redirect(url_for('thanks'))
+    # Waga dystansu
+    normalized_distances_weight = w4  # Waga dla dystansu (ostatniego kryterium)
 
+    # Uwzględnienie wag dla odległości w macierzy porównań
+    weighted_comparison_matrix = np.copy(comparison_matrix)
+    for i, distance_weight in enumerate(normalized_distances):
+        if distances[i] > max_distance_allowed:
+            distance_weight = 0
 
-# @app.route('/ticketpayment', methods = ['POST'])
-# @login_required
-# def ticket_payment():
-#     invoice = request.form.get('invoice')
-#     amount = request.form.get('amount')
-#     print(amount)
-#
-#     customer = stripe.Customer.create(
-#         email = request.form['stripeEmail'],
-#         source = 'tok_visa'
-#     )
-#
-#     charge = stripe.Charge.create(
-#         customer = customer.id,
-#         description = 'Ski Geek',
-#         amount = amount,
-#         currency = 'pln'
-#     )
-#
-#     customer_ticket = CustomerTicket.query.filter_by(invoice=invoice).order_by(CustomerTicket.id.desc()).first()
-#     customer_ticket.status = 'Paid'
-#     db.session.commit()
-#     return redirect(url_for('thanks'))
+        weighted_comparison_matrix[i][-1] = distance_weight * normalized_distances_weight
 
-# @app.route('/ticketpayment', methods = ['POST'])
-# @login_required
-# def ticket_payment():
-#     invoice = request.form.get('invoice')
-#     amount = request.form.get('amount')
-#     print(amount)
-#
-#     customer = stripe.Customer.create(
-#         email = request.form['stripeEmail'],
-#         source = 'tok_visa'
-#     )
-#
-#     charge = stripe.Charge.create(
-#         customer = customer.id,
-#         description = 'Ski Geek',
-#         amount = amount,
-#         currency = 'pln'
-#     )
-#
-#     customer_ticket = CustomerTicket.query.filter_by(invoice=invoice).order_by(CustomerTicket.id.desc()).first()
-#     customer_ticket.status = 'Paid'
-#     db.session.commit()
-#     return redirect(url_for('thanks'))
+    # Obliczanie wag kryteriów
+    sum_column = np.sum(weighted_comparison_matrix, axis=0)
+    criteria_weights = sum_column / np.sum(sum_column)
 
+    # Obliczanie oceny restauracji
+    scores = np.dot(weighted_comparison_matrix, criteria_weights)
 
-#
-# @app.route('/thanks')
-# def thanks():
-#     return render_template('thank.html')
+    # Sortowanie restauracji w oparciu o ocenę
+    sorted_restaurants = [restaurant for _, restaurant in sorted(zip(scores, restaurants), reverse=True)]
 
+    # Wybór najlepszych 10 restauracji
+    top_10_restaurants = sorted_restaurants[:10]
 
-
-#
-# # @app.route("/about")
-# # def about():
-# #     return render_template('about.html', title='About')
-#
-# # @app.route("/offer")
-# # def offer():
-# #     return render_template('offer.html', title='Offer')
-#
-#
-
-#
-# @app.route("/offer")
-# def getProduct():
-#     page = request.args.get('page', 1, type=int)
-#     # products = Addproduct.query.filter(Addproduct.stock > 0)
-#     rows = Product.query.filter(Product.quantity > 0).order_by(Product.id.desc()).paginate(page=page, per_page=4)
-#     # brands = Brand.querry.all()
-#     return render_template('offer.html', title='Offer',products=rows)
-#
-# @app.route('/product/<int:id>')
-# def single_page(id):
-#     product = Product.query.get_or_404(id)
-#     return render_template('single_page.html', product=product)
-#
-# @app.route("/search", methods=['GET','POST'])
-# @login_required
-# def search():
-#     return True
-#
-# @app.route("/addcart", methods=['POST'])
-# def AddCart():
-#     # form = ProductForm()
-#     # product = Product.query.filter_by(id=1).first()
-#     # size = product.size.split(',')
-#     # print(size[0])
-#     # if current_user.is_authenticated:
-#         try:
-#             product_id = request.form.get('product_id')
-#             quantity = int(request.form.get('quantity'))
-#             size = request.form.get('size')
-#             product = Product.query.(id=product_id).first()
-#
-#             if product_id and quantity and size and request.method == "POST":
-#                 DictItems = {product_id:{'name':product.name, 'price':float(product.price),
-#                                            'category':product.category, 'quantity':int(quantity), 'image':product.image, 'size':size, 'sizes':product.size}}
-#                 print(product.size)
-#                 if 'Shoppingcart' in session:
-#                     # print(session['Shoppingcart'])
-#                     if product_id in session['Shoppingcart']:
-#                         for key, item in session['Shoppingcart'].items():
-#                             if int(key) == int(product_id):
-#                                 if item['size'] == size:
-#                                     print("ten sam rozmiar")
-#                                     session.modified = True
-#                                     item['quantity'] += 1
-#                                     if(product.quantity>0):
-#                                         product.quantity -= quantity;
-#                                         db.session.commit()
-#                                 else:
-#                                     product.quantity += int(item['quantity'])
-#                                     product.quantity -= quantity;
-#                                     db.session.commit()
-#
-#                                     session['Shoppingcart'] = DictItems
-#                         # print("This product is already in your cart")
-#                     else:
-#                         session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems )
-#                         if (product.quantity > 0):
-#                             product.quantity -= quantity;
-#                             db.session.commit()
-#                         return redirect(request.referrer)
-#                 else:
-#                     session['Shoppingcart'] = DictItems
-#                     if (product.quantity > 0):
-#                         product.quantity -= quantity;
-#                         db.session.commit()
-#                     return redirect(request.referrer)
-#         except Exception as e:
-#             print(e)
-#         finally:
-#             return redirect(request.referrer)
-#     # else:
-#     #     return redirect(request.base_url)
-#
-#
-# def MergeDicts(dict1, dict2):
-#     if isinstance(dict1, list) and isinstance(dict2, list):
-#         return dict1 + dict2
-#     elif isinstance(dict1, dict) and isinstance(dict2, dict):
-#         return dict(list(dict1.items()) + list(dict2.items()))
-#     return False
-#
-# @app.route('/cart')
-# def getCart():
-#     form = ProductForm()
-#     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
-#         return redirect(url_for('getProduct'))
-#     subtotal = 0
-#     randtotal = 0
-#     items = Product.query.all()
-#     for key, product in session['Shoppingcart'].items():
-#         subtotal += float(product['price']) * int(product['quantity'])
-#         # tax = ("%.2f" % (.23 * float(subtotal)))
-#         # grandtotal = float("%.2f" % (1.23 * subtotal))
-#         grandtotal = float(subtotal)
-#     return render_template('carts.html', title='Cart',grandtotal=grandtotal, items=items)
-#     # , form=form)
-#
-#
-# @app.route('/result')
-# def result():
-#     searchword = request.args.get('q')
-#     products = Product.query.msearch(searchword, fields=['name','description'])
-#     return render_template('fav-restaurant.html',products=products)
-#
-#
-# #
-# # @app.route('/search', methods=['GET', 'POST'])
-# # def index():
-# #     search = MusicSearchForm(request.form)
-# #     if request.method == 'POST':
-# #         return search_results(search)
-# #     return render_template('index.html', form=search)
-#
-# @app.route('/updatecart/<int:code>', methods=['POST'])
-# def updatecart(code):
-#
-#     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
-#         return redirect(url_for('getProduct'))
-#     if request.method == "POST":
-#         quantity = request.form.get('quantity')
-#         size = request.form.get('size')
-#
-#
-#         try:
-#             session.modified = True
-#
-#             for key, item in session['Shoppingcart'].items():
-#                 if int(key) == code:
-#                     product = Product.query.get(code)
-#                     product.quantity += int(item['quantity'])
-#                     product.quantity -= int(quantity)
-#                     db.session.commit()
-#                     item['quantity'] = quantity
-#                     item['size'] = size
-#                     flash('Item updated', 'success')
-#                     return redirect(url_for('getCart'))
-#         except Exception as e:
-#             print(e)
-#             return redirect(url_for('getCart'))
-#
-# @app.route('/deleteitem/<int:id>')
-# def deleteitem(id):
-#     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
-#         return redirect(url_for('getProduct'))
-#     try:
-#         session.modified = True
-#         for key , item in session['Shoppingcart'].items():
-#             if int(key) == id:
-#                 product = Product.query.get(id)
-#                 product.quantity += int(item['quantity'])
-#                 db.session.commit()
-#
-#                 session['Shoppingcart'].pop(key, None)
-#                 return redirect(url_for('getCart'))
-#     except Exception as e:
-#         print(e)
-#         return redirect(url_for('getCart'))
-#
-#
-# @app.route('/clearcart')
-# def clearcart():
-#     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
-#         return redirect(url_for('getProduct'))
-#
-#     try:
-#         session.modified = True
-#         for key, item in session['Shoppingcart'].items():
-#             product = Product.query.get(key)
-#             product.quantity += int(item['quantity'])
-#             db.session.commit()
-#
-#         session.pop('Shoppingcart', None)
-#         return redirect(url_for('getCart'))
-#     except Exception as e:
-#         print(e)
-#
-# def updateshoppingcart():
-#     for key, product in session['Shoppingcart'].items():
-#         session.modified = True
-#         del product['image']
-#
-#     return updateshoppingcart
-#
-#
-# @app.route('/getorder')
-# @login_required
-# def get_order():
-#     if current_user.is_authenticated:
-#         customer_id = current_user.id
-#         invoice = secrets.token_hex(5)
-#         grandtotal = 0
-#         subtotal = 0
-#         for order in session['Shoppingcart'].items():
-#             subtotal = order[1]['price'] * float(order[1]['quantity'])
-#             grandtotal += subtotal
-#         print(grandtotal)
-#
-#         updateshoppingcart()
-#
-#         try:
-#             order = CustomerOrder(invoice=invoice,customer_id=customer_id,orders=session['Shoppingcart'], grandtotal=grandtotal)
-#             db.session.add(order)
-#             db.session.commit()
-#
-#
-#             session.pop('Shoppingcart')
-#             # flash('You order has been sent', 'success')
-#             return redirect(url_for('orders', invoice=invoice))
-#
-#         except Exception as e:
-#             print(e)
-#             flash('Problem with order', 'danger')
-#             return redirect(url_for('getCart'))
-#
-# @app.route('/orders/<invoice>')
-# @login_required
-# def orders(invoice):
-#     if current_user.is_authenticated:
-#         grandtotal = 0
-#         subtotal = 0
-#         customer_id = current_user.id
-#         customer = Users.query.filter_by(id=customer_id).first()
-#         orders = CustomerOrder.query.filter_by(invoice=invoice).order_by(CustomerOrder.id.desc()).first()
-#
-#         for _key, product in orders.orders.items():
-#             subtotal += float(product['price']) * int(product['quantity'])
-#             grandtotal = ("%.2f" % float(subtotal))
-#     else:
-#         return redirect(url_for('login'))
-#     return render_template('orders.html', invoice=invoice, subtotal=subtotal, grandtotal=grandtotal, customer=customer, orders=orders)
-#
-# @app.route("/comment/new", methods=['GET', 'POST'])
-# @login_required
-# def new_post():
-#     form = PostForm()
-#
-#     if form.validate_on_submit():
-#         post = Post(title=form.title.data, content=form.content.data, author=current_user)
-#         db.session.add(post)
-#         db.session.commit()
-#         flash('Your post has been create', 'success')
-#         return redirect(url_for('home'))
-#     return render_template('post.html', form=form, legend='New comment')
-#
-#
-# @app.route("/comment/update/<int:post_id>", methods=['GET', 'POST'])
-# @login_required
-# def updatePost(post_id):
-#     post = Post.query.get_or_404(post_id)
-#     form = PostForm()
-#
-#     if form.validate_on_submit():
-#         print("w srodku")
-#         post.title = form.title.data
-#         post.content = form.content.data
-#         db.session.commit()
-#         flash('Your post has been updated', 'success')
-#         return redirect(url_for('updatePost', post_id=post.id))
-#     elif request.method == 'GET':
-#         form.title.data = post.title
-#         form.content.data = post.content
-#
-#     return render_template('update_post.html', form=form, post=post, legend='Edit comment')
-#
-#
-# @app.route("/comment/delete/<int:post_id>", methods=['GET', 'POST'])
-# @login_required
-# def deletePost(post_id):
-#     post = Post.query.get_or_404(post_id)
-#     db.session.delete(post)
-#     db.session.commit()
-#     flash('Your post has been deleted', 'success')
-#     return redirect(url_for('home'))
-#
-#
-# @app.route("/ticket")
-# # @login_required
-# def ticket():
-#     tickets = Ticket.query.all()
-#     return render_template('ticket.html', tickets = tickets)
-#
-#
-#
-# @app.route('/getticket/<int:ticket_id>', methods=['POST','GET'])
-# @login_required
-# def get_ticket(ticket_id):
-#     if current_user.is_authenticated:
-#         customer_id = current_user.id
-#         invoice = secrets.token_hex(5)
-#
-#         if request.method == "POST":
-#             quantity = int(request.form.get('quantity'))
-#             ticket = Ticket.query.get(ticket_id)
-#         # print(ticket)
-#             price = float(ticket.price)
-#             print(price)
-#             print(quantity)
-#             subtotal = float(quantity*price)
-#             print(subtotal)
-#
-#             try:
-#                 customer_ticket = CustomerTicket(invoice=invoice,customer_id=customer_id,ski_pass=ticket.ski_pass, type=ticket.type,
-#                                        amount=ticket.amount, price=ticket.price, quantity=quantity, grandtotal=subtotal)
-#                 db.session.add(customer_ticket)
-#                 db.session.commit()
-#                 flash('Tickets ordered', 'success')
-#                 return redirect(url_for('ticket_orders', invoice=invoice))
-#
-#             except Exception as e:
-#                 print(e)
-#                 flash('Problem with order', 'danger')
-#                 return redirect(url_for('ticket'))
-#
-#     return redirect(url_for('ticket'))
-#
-#
-# @app.route('/ticketorders/<invoice>')
-# @login_required
-# def ticket_orders(invoice):
-#     if current_user.is_authenticated:
-#         grandtotal = 0
-#         subtotal = 0
-#         customer_id = current_user.id
-#         customer = Users.query.filter_by(id=customer_id).first()
-#         customer_ticket = CustomerTicket.query.filter_by(invoice=invoice).order_by(CustomerTicket.id.desc()).first()
-#         subtotal = customer_ticket.grandtotal
-#         grandtotal = subtotal
-#
-#     else:
-#         return redirect(url_for('ticket'))
-#     return render_template('ticketOrders.html', invoice=invoice, grandtotal=grandtotal, customer=customer, customer_ticket=customer_ticket)
-#
-#
-#
-# @app.route('/returnorder/<invoice>')
-# @login_required
-# def return_order(invoice):
-#     if current_user.is_authenticated:
-#         grandtotal = 0
-#         subtotal = 0
-#         customer_id = current_user.id
-#         customer = Users.query.filter_by(id=customer_id).first()
-#         orders = CustomerOrder.query.filter_by(invoice=invoice).order_by(CustomerOrder.id.desc()).first()
-#
-#         for _key, product in orders.orders.items():
-#             quantity = product['quantity']
-#             p = Product.query.get(_key)
-#             p.quantity += quantity
-#             db.session.commit()
-#
-#         db.session.delete(orders)
-#         db.session.commit()
-#         flash('Order Returned', 'success')
-#     else:
-#         return redirect(url_for('home'))
-#     return redirect(url_for('home'))
-#     # return render_template('orders.html', invoice=invoice, subtotal=subtotal, grandtotal=grandtotal, customer=customer, orders=orders)
+    # Wyświetlanie wyników
+    for i, restaurant in enumerate(top_10_restaurants):
+        print(
+            f"{i + 1}. {restaurant['name']}: {restaurant['cuisine']}, {restaurant['price_range']}, {restaurant['rating']}")
