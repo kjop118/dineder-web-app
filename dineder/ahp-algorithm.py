@@ -1,6 +1,6 @@
 import numpy as np
 from geopy.distance import geodesic
-from dineder.models import Restaurants
+#from dineder.models import Restaurants
 # Dane wejściowe
 
 user_location = (51.5074, -0.1278)  # Przykładowa lokalizacja użytkownika (Londyn)

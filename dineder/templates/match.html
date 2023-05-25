@@ -180,12 +180,40 @@
 
 
         <script type="text/javascript">
+            
             const btn = document.getElementById('showCarousel');
             console.log(btn)
             if (btn) {
                 btn.addEventListener('click', function () {
                     var myCarousel = document.getElementById('myCarousel');
-                    myCarousel.style.display = 'block';
+                    myCarousel.style.display = 'block'; 
+
+                    var price = document.getElementsByClassName('price')[0];
+                    var price_w = document.getElementsByClassName('price-weight')[0];
+                    var val_price = price.options[price.selectedIndex].text;
+                    var val_price_w = price_w.options[price_w.selectedIndex].text;
+                    
+                    var ratings = document.getElementsByClassName('ratings')[0];
+                    var ratings_w = document.getElementsByClassName('ratings-weight')[0];
+                    var val_ratings = ratings.options[ratings.selectedIndex].text;
+                    var val_ratings_w = ratings_w.options[ratings_w.selectedIndex].text;
+
+                    var distance = document.getElementsByClassName('distance')[0];
+                    var distance_w = document.getElementsByClassName('distance-weight')[0];
+                    var val_distance = distance.options[distance.selectedIndex].text;
+                    var val_distance_w = distance_w.options[distance_w.selectedIndex].text;
+
+                    var cuisine = document.getElementsByClassName('cuisine')[0];
+                    var cuisine_w = document.getElementsByClassName('cuisine-weight')[0];
+                    var val_cuisine = cuisine.options[cuisine.selectedIndex].text;
+                    var val_cuisine_w = cuisine_w.options[cuisine_w.selectedIndex].text;
+                    
+                    alert("Price: " + val_price + ",w: " + val_price_w  + "\n" +
+                          "ratings: " + val_ratings + ",w: " + val_ratings_w  + "\n" +
+                          "distance: " + val_distance + ",w: " + val_distance_w  + "\n" +
+                          "cuisine: " + val_cuisine + ",w: " + val_cuisine_w 
+                    ); 
+
                 });
             }
         </script>

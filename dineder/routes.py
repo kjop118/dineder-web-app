@@ -6,6 +6,35 @@ from flask_login import login_user, current_user, logout_user, login_required
 import numpy as np
 from geopy.distance import geodesic
 
+from sqlalchemy import select
+
+
+def price_filter(price, restaurants):
+    result = []
+    for i in restaurants:
+        if i["price_range"] < price:
+            result.append(i)
+    return result
+
+def rating_filter(rating, restaurants):
+    result = []
+    for i in restaurants:
+        if i["rating"] > rating:
+            result.append(i)
+    return result
+
+def location_filter(user_location, allowed_distance, restaurants):
+
+    #tu jeszcze normalizacja była?
+    result = []
+    for restaurant in restaurants:
+         restaurant_location = restaurant['location']
+         distance = geodesic(user_location, restaurant_location).km
+         if distance < allowed_distance:
+             result.append(restaurant)
+    return result
+
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -68,18 +97,61 @@ def getFavRestaurant():
 
 @app.route("/match-restaurant", methods=['GET', 'POST'])
 def getYourMatch():
+    #to chyba będzie trzeba przenieść do innego routa bo póki co odpala się po odświeżeniu 
+    #strony na zakładce /match-restaurant, a nie po przycisku MATCH
     cuisines = Cuisines.query.all()
 
-    # pobieram cuisine od uzytkownika
+    # dane, które wpisze user
     cuisine = 'Afghan'
+    cuisine_w = 5
+    rating = 3.8
+    rating_w = 3
+    price = 700
+    price_w = 4
+    allowed_distance = 27
+    allowed_distance_w = 2
+    # to jakos pobierać
+    user_location = (20, 50)
 
-    # na podstawie nazwy kuchni pobieram id cusine
-    cuisine_id = Cuisines.query.filter_by(cuisine=cuisine).first()
-    print(cuisine_id.id)
+    # wyznaczanie wag - które filtry będę uwzględnione jako pierwsze
+    weights = []   
+    pair_rating = ("rating", rating_w)
+    pair_price = ("price", price_w)
+    pair_distance = ("allowed_distance", allowed_distance_w)
+    weights.append(pair_rating)
+    weights.append(pair_price)
+    weights.append(pair_distance)
+    weights = sorted(weights,key=lambda x: x[1], reverse=True)
 
+
+    # na podstawie nazwy kuchni pobieram id cusine - kuchnia kryterium, które będzie najważniejsze
+    row_cuisine = Cuisines.query.filter_by(cuisine=cuisine).first()
+    print(row_cuisine.id)
+    rowsCuisneRestaurant = CuisinesRestaurants.query.filter_by(cuisine_id=row_cuisine.id) 
+
+    result = []
+    for rowCuisneRestaurant in rowsCuisneRestaurant:
+        restaurant = Restaurants.query.filter_by(id=rowCuisneRestaurant.restaurant_id).first()
+        result.append({'name': restaurant.rest_name, 'cuisine': cuisine, 'price_range': restaurant.cost, 'rating': restaurant.rate, 'location': (restaurant.longitude, restaurant.latitude)})
+    
+    for i in weights:
+        if i[0] == "price":
+            result = price_filter(price, result)
+        if i[0] == "rating":
+            result = rating_filter(rating, result)
+        if i[0] == "allowed_distance":
+            result = location_filter(user_location, allowed_distance, result)
+
+    #póki co wypisanie co sie udało przefiltrować - dostajemy McD :)
+    for i in result:
+        print(i)
+
+    #lista tych restauracji do algorytmu ma trafić? 
+
+    
     #na podstawie cuisine id szukam restauracji które pasują pod to kryterium
-    restaurantsWithSpecificCuisine = CuisinesRestaurants.query.filter_by(cuisine_id=cuisine_id).all()
-    print(restaurantsWithSpecificCuisine)
+#    restaurantsWithSpecificCuisine = CuisinesRestaurants.query.filter_by(cuisine_id=cuisine_id).all()
+#   print(restaurantsWithSpecificCuisine)
 
     # print(cuisineInRestaurants)
     # list = Cuisines.query.filter_by(cuisine = 'Pizza').all()
