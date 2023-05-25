@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from dineder import app, db, bcrypt
 from dineder.forms import RegistrationForm, LoginForm
-from dineder.models import Users, Restaurants, Cuisines
+from dineder.models import Users, Restaurants, Cuisines, CuisinesRestaurants, UserRestaurant, Preferences
 from flask_login import login_user, current_user, logout_user, login_required
 import numpy as np
 from geopy.distance import geodesic
@@ -69,8 +69,21 @@ def getFavRestaurant():
 @app.route("/match-restaurant", methods=['GET', 'POST'])
 def getYourMatch():
     cuisines = Cuisines.query.all()
-    cuisine = Cuisines.query.get(10)
-    print(cuisine)
+
+    # pobieram cuisine od uzytkownika
+    cuisine = 'Afghan'
+
+    # na podstawie nazwy kuchni pobieram id cusine
+    cuisine_id = Cuisines.query.filter_by(cuisine=cuisine).first()
+    print(cuisine_id.id)
+
+    #na podstawie cuisine id szukam restauracji które pasują pod to kryterium
+    restaurantsWithSpecificCuisine = CuisinesRestaurants.query.filter_by(cuisine_id=cuisine_id).all()
+    print(restaurantsWithSpecificCuisine)
+
+    # print(cuisineInRestaurants)
+    # list = Cuisines.query.filter_by(cuisine = 'Pizza').all()
+
     # restaurants_db = Restaurants.query.all()
     # restaurants_all = []
     #

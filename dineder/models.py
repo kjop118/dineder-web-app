@@ -11,12 +11,14 @@ def load_user(user_id):
 
 
 class Users(db.Model, UserMixin):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     surname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    user_fk = db.relationship('Users', backref='user_id', lazy=True)
+    restaurant = db.relationship('UserRestaurant', backref='user-fav-rest', lazy=True)
+    preferences = db.relationship('Preferences', backref='user-filters', lazy=True)
 
     # def get_reset_token(self, expires_sec=1800):
     #     s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -27,6 +29,7 @@ class Users(db.Model, UserMixin):
 
 
 class Restaurants(db.Model):
+    __tablename__ = 'restaurants'
     id = db.Column(db.Integer, primary_key=True)
     rest_name = db.Column(db.String(100), nullable=False)
     online_order = db.Column(db.Boolean)
@@ -37,14 +40,17 @@ class Restaurants(db.Model):
     cost = db.Column(db.Float)
     longitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
+    user = db.relationship('UserRestaurant', backref='fav-rest', lazy=True)
+    cuisine = db.relationship('CuisinesRestaurants', backref='restaurant-cuisine', lazy=True)
 
     def __repr__(self):
         return '<Restaurant %r>' % self.rest_name
 
-class user_restaurant(db.Model):
+class UserRestaurant(db.Model):
+    __tablename__ = 'user_restaurant'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.relationship('Users', backref='id', lazy=True)
-    restaurant_id = db.relationship('Restaurants', backref='id', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
 
     def __repr__(self):
         return '<FAV RESTAURANT for user %r>' % self.user_id
@@ -52,17 +58,19 @@ class user_restaurant(db.Model):
 class Cuisines(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cuisine = db.Column(db.String(300), nullable=False)
+    restaurant = db.relationship('CuisinesRestaurants', backref='restaurant-with-cuisine', lazy=True)
 
     def __repr__(self):
-        return '<Restaurant %r>' % self.cuisine
+        return '<Cuisine %r>' % self.cuisine
 
-# class cuisines_restaurants(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     cuisine_id = db.relationship('Cuisine', backref='id', lazy=True)
-#     restaurant_id = db.relationship('Restaurants', backref='id', lazy=True)
-#
-#     def __repr__(self):
-#         return '<Restaurants and cuisines %r>' % self.restaurant_id
+class CuisinesRestaurants(db.Model):
+    __tablename__ = 'cuisine_restaurant'
+    id = db.Column(db.Integer, primary_key=True)
+    cuisine_id = db.Column(db.Integer, db.ForeignKey('cuisines.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
+
+    def __repr__(self):
+        return '<Restaurants and cuisines %r>' % self.restaurant_id
 
 
 class Preferences(db.Model):
@@ -75,7 +83,7 @@ class Preferences(db.Model):
     ratings_importance = db.Column(db.Integer, nullable=False)
     distance = db.Column(db.String(300), nullable=False)
     distance_importance = db.Column(db.Integer, nullable=False)
-    user_id = db.relationship('Users', backref='id', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
         return f"User preferences('{self.cuisine}', '{self.price}', '{self.ratings}', '{self.distance}')"
