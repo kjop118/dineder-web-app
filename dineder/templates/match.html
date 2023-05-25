@@ -1,72 +1,209 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container-match">
-
-        <div class="filters">
-
-            <div class="navigation-bar">
-                <span>FILTERS</span>
-                <span>IMPORTANCE</span>
-            </div>
-            <div class="cousine-content">
-                <span class="cousine-txt">COUSINE</span>
-                <select class="cousine">
-                  <option value="">Wybierz kuchnię</option>
-                  <option value="włoska">włoska</option>
-                  <option value="polska">polska</option>
-                  <option value="japońska">japońska</option>
-                </select>
-
-                <select class="cousine-weight">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-
+        <div class="row">
+            <div class="col labels-column">
+                <div class="first-label">
+                    <span class="info-label">PARAMETERS</span>
+                </div>
+                <div class="parameters-label">
+                    <p class="labels-txt">COUSINE</p>
+                    <p class="labels-txt">PRICE RANGE</p>
+                    <p class="labels-txt">RATINGS</p>
+                    <p class="labels-txt">DISTANCE</p>
+                </div>
             </div>
 
-            <div class="price-content">
-                <span class="cousine-txt">PRICE RANGE</span>
-                <select class="price">
-                  <option value="">Wybierz zakres cenowy</option>
-                  <option value="opcja1">Opcja 1</option>
-                  <option value="opcja2">Opcja 2</option>
-                  <option value="opcja3">Opcja 3</option>
-                </select>
+            <div class="col filters-column">
+                <div class="row filters-label-row">
+                    <div class="col second-label">
+                        <span class="filters-label">FILTERS</span>
+                    </div>
+                    <div class="col">
+                        <span class="importance-label">IMPORTANCE</span>
+                    </div>
+                </div>
+                <div class="row filters-params-row">
+                    <div class="col d-flex flex-column align-items-center filters-params">
+                        <select class="cousine">
+                          <option value="">Wybierz kuchnię</option>
+                          <option value="włoska">włoska</option>
+                          <option value="polska">polska</option>
+                          <option value="japońska">japońska</option>
+                        </select>
+
+                        <select class="price">
+                          <option value="">Wybierz zakres cenowy</option>
+                          <option value="opcja1">Opcja 1</option>
+                          <option value="opcja2">Opcja 2</option>
+                          <option value="opcja3">Opcja 3</option>
+                        </select>
+
+                        <select class="ratings">
+                          <option value="">Wybierz ocenę</option>
+                          <option value="opcja1">Opcja 1</option>
+                          <option value="opcja2">Opcja 2</option>
+                          <option value="opcja3">Opcja 3</option>
+                        </select>
+
+                        <select class="distance">
+                          <option value="">Wybierz odległość</option>
+                          <option value="opcja1">Opcja 1</option>
+                          <option value="opcja2">Opcja 2</option>
+                          <option value="opcja3">Opcja 3</option>
+                        </select>
+                    </div>
+
+                    <div class="col d-flex flex-column align-items-center weight-column">
+                        <select class="cousine-weight">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+
+                        <select class="price-weight">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+
+                        <select class="ratings-weight">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+
+                        <select class="distance-weight">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
-            <div class="rating-content">
-                <span class="cousine-txt">RATINGS</span>
-                <select class="ratings">
-                  <option value="">Wybierz ocenę</option>
-                  <option value="opcja1">Opcja 1</option>
-                  <option value="opcja2">Opcja 2</option>
-                  <option value="opcja3">Opcja 3</option>
-                </select>
-            </div>
-
-            <div class="distance-content">
-                <span class="cousine-txt">DISTANCE</span>
-                <select class="distance">
-                  <option value="">Wybierz odległość</option>
-                  <option value="opcja1">Opcja 1</option>
-                  <option value="opcja2">Opcja 2</option>
-                  <option value="opcja3">Opcja 3</option>
-                </select>
+            <div class="col d-flex align-items-center justify-content-left save-column">
+                {% if current_user.is_authenticated %}
+                <div class="save-filters">
+                    <button class="btn btn-save">SAVE</button>
+                </div>
+                {% else %}
+                <div class="save-filters">
+                    <a href="/login" class="btn btn-save">SAVE</a>
+                </div>
+                {% endif %}
             </div>
         </div>
 
-        {% if current_user.is_authenticated %}
-        <div class="save-filters">
-            <button class="btn btn-save">SAVE</button>
+        <div class="find-restaurant">
+            <button id="showCarousel" class="btn btn-find">MATCH</button>
         </div>
-        {% else %}
-        <div class="save-filters">
-            <a href="/login" class="btn btn-save">SAVE</a>
-        </div>
-        {% endif %}
 
+
+
+
+<!--        karuzela wiiiiiiiiiiiiiiii-->
+        <div id="myCarousel" class="carousel slide karuzela" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+          </ol>
+
+          <div class="carousel-inner text-center">
+            <div class="carousel-item active">
+              <img src="static/pictures/fryty.gif" alt="Obraz 1">
+              <div class="carousel-caption">
+                <h3>Opis 1</h3>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="static/pictures/fryty.gif" alt="Obraz 2">
+              <div class="carousel-caption">
+                <h3>Opis 2</h3>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="static/pictures/fryty.gif" alt="Obraz 3">
+              <div class="carousel-caption">
+                <h3>Opis 3</h3>
+              </div>
+            </div>
+          </div>
+
+          <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Poprzedni</span>
+          </a>
+          <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Następny</span>
+          </a>
+        </div>
+
+        <h1>Udostępnij lokalizację</h1>
+    <button onclick="getLocation()">Pobierz lokalizację</button>
+
+        <script type="text/javascript">
+            const btn = document.getElementById('showCarousel');
+            console.log(btn)
+            if (btn) {
+                btn.addEventListener('click', function () {
+                    var myCarousel = document.getElementById('myCarousel');
+                    myCarousel.style.display = 'block';
+                });
+            }
+        </script>
+
+        <script>
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                        enableHighAccuracy: true
+                    });
+                } else {
+                    alert("Twoja przeglądarka nie obsługuje Geolokalizacji.");
+                }
+            }
+
+            function showPosition(position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var accuracy = position.coords.accuracy;
+
+                // Wyświetlenie informacji o lokalizacji
+                var message = "Twoja aktualna lokalizacja:\n";
+                message += "Szerokość geograficzna: " + latitude + "\n";
+                message += "Długość geograficzna: " + longitude + "\n";
+                message += "Dokładność: " + accuracy + " metrów";
+
+                alert(message);
+            }
+
+            function showError(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert("Użytkownik nie udostępnił lokalizacji.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("Informacje o lokalizacji są niedostępne.");
+                        break;
+                    case error.TIMEOUT:
+                        alert("Przekroczono limit czasu oczekiwania na lokalizację.");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        alert("Wystąpił nieznany błąd podczas pobierania lokalizacji.");
+                        break;
+                }
+            }
+        </script>
     </div>
 {% endblock content%}

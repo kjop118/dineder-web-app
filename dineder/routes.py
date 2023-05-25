@@ -1,8 +1,8 @@
 import secrets
 
 from flask import render_template, url_for, flash, redirect, request, session
-from dineder import app, db, bcrypt, search
-from dineder.forms import RegistrationForm, LoginForm #, UpdateAccountForm, ProductForm, PostForm
+from dineder import app, db, bcrypt
+from dineder.forms import RegistrationForm, LoginForm
 from dineder.models import Users
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -15,7 +15,7 @@ def home():
 @app.route("/about")
 def about():
     # posts = Post.query.all();
-    return render_template('about.html')
+    return render_template('about.html', title="ABOUT")
 
 
 @app.route("/register", methods=['GET', 'POST'])

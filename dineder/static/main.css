@@ -296,93 +296,186 @@ h1, h2, h3, h4, h5, h6 {
 .cousine-content {
     margin-top: 10px;
 }
-.cousine-txt {
+.labels-txt {
     flex: 1;
     font-family: 'Neucha', cursive;
     font-size: 20px;
     color: #a91c1c;
     font-weight: bold;
+    display: block;
+    margin-bottom: 22px;
 }
 .cousine {
     height: 40px;
     width: 300px;
     border-radius: 20px;
     text-align: center;
+    margin-bottom: 10px;
 }
+
 .cousine-weight {
     height: 40px;
     width: 50px;
     text-align: center;
     border-radius: 20px;
+    /*display: block;*/
+    margin-bottom: 10px;
+}
+
+.price-weight {
+    height: 40px;
+    width: 50px;
+    text-align: center;
+    border-radius: 20px;
+    /*display: block;*/
+    margin-bottom: 10px;
+}
+
+.ratings-weight {
+    height: 40px;
+    width: 50px;
+    text-align: center;
+    border-radius: 20px;
+    /*display: block;*/
+    margin-bottom: 10px;
+}
+
+.distance-weight {
+    height: 40px;
+    width: 50px;
+    text-align: center;
+    border-radius: 20px;
+    /*display: block;*/
+    margin-bottom: 10px;
 }
 
 .price-content {
     margin-top: 10px;
 }
 
-.price-txt {
-    flex: 1;
-    font-family: 'Neucha', cursive;
-    font-size: 20px;
-    color: #a91c1c;
-    font-weight: bold;
-
-}
 .price {
     height: 40px;
     width: 300px;
     border-radius: 20px;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .rating-content {
     margin-top: 10px;
-}
-
-.ratings-txt {
-    flex: 1;
-    font-family: 'Neucha', cursive;
-    font-size: 20px;
-    color: #a91c1c;
-    font-weight: bold;
 }
 .ratings {
     height: 40px;
     width: 300px;
     border-radius: 20px;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .distance-content {
     margin-top: 10px;
 }
 
-.distance-txt {
-    flex: 1;
-    font-family: 'Neucha', cursive;
-    font-size: 20px;
-    color: #a91c1c;
-    font-weight: bold;
-}
 .distance {
     height: 40px;
     width: 300px;
     border-radius: 20px;
     text-align: center;
+    margin-bottom: 10px;
 }
+
+.info-label {
+    font-family: 'Neucha', cursive;
+    font-size: 25px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.first-label {
+    margin-bottom: 15px;
+}
+
+.second-label {
+    margin-bottom: 10px;
+    text-align: center;
+    flex: 2;
+}
+
+.filters-label {
+    font-family: 'Neucha', cursive;
+    font-size: 25px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.labels-column {
+    text-align: right;
+}
+
+.importance-label {
+    font-family: 'Neucha', cursive;
+    font-size: 25px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
 
 .btn-save {
     border-radius: 20px;
-    background-color: #e82c3d;
+    background-color: #ce6e11;
     color: white;
     font-family: 'Cantarell', sans-serif;
     font-weight: bold;
-    margin-left: 100px;
 }
 .btn-save:hover {
-    background-color: #e85665;
+    background-color: #c77a31;
     color: white;
 }
+
+.find-restaurant {
+    display: grid;
+    place-items: center;
+}
+
+.btn-find {
+    display: inline-block;
+    border-radius: 30px;
+    border: 8px solid white;
+    background-color: #EBAC33; /* Kolor tła guzika */
+    color: white; /* Kolor tekstu w guziku */
+    font-size: 40px;
+    font-family: 'Neucha', cursive;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.btn-find:hover {
+    background-color: #e7a41f; /* Kolor tła guzika */
+    border: 8px solid #c2bfbf;
+    color: #c2bfbf;
+}
+
+.filters-column {
+    text-align: center;
+}
+
+.col .weight-column {
+    display: block;
+    text-align: center;
+}
+
+.karuzela {
+    margin-top: 50px;
+}
+
+.carousel-caption {
+    margin-top: 50px;
+}
+
+#myCarousel {
+    display: none;
+}
+
 
 /*.site-header .navbar-brand {*/
 /*    color: #2b235b;*/
