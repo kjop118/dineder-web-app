@@ -1,182 +1,224 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container-match">
-        <div class="row">
-            <div class="col labels-column">
-                <div class="first-label">
-                    <span class="info-label">PARAMETERS</span>
+        <form id="matchForm" method="POST" action="">
+            <div class="row">
+                <div class="col labels-column">
+                    <div class="first-label">
+                        <span class="info-label">PARAMETERS</span>
+                    </div>
+                    <div class="parameters-label">
+                        <p class="labels-txt">CUISINE</p>
+                        <p class="labels-txt">PRICE RANGE</p>
+                        <p class="labels-txt">RATINGS</p>
+                        <p class="labels-txt">DISTANCE</p>
+                    </div>
                 </div>
-                <div class="parameters-label">
-                    <p class="labels-txt">CUISINE</p>
-                    <p class="labels-txt">PRICE RANGE</p>
-                    <p class="labels-txt">RATINGS</p>
-                    <p class="labels-txt">DISTANCE</p>
+
+                <div class="col filters-column">
+                    <div class="row filters-label-row">
+                        <div class="col second-label">
+                            <span class="filters-label">FILTERS</span>
+                        </div>
+                        <div class="col">
+                            <span class="importance-label">IMPORTANCE</span>
+                        </div>
+                    </div>
+
+                    <div class="row filters-params-row">
+                        <div class="col d-flex flex-column align-items-center filters-params">
+                            <select class="cuisine" name="cuisine">
+<!--                                {% if saved_cuisine is not defined  or  saved_cuisine == ''%}-->
+<!--                                    <option value="{{ saved_cuisine }}">Wybierz kuchnię</option>-->
+<!--                                {% else %}}-->
+<!--                                    <option value="{{ saved_cuisine }}">{{ saved_cuisine }}</option>-->
+<!--                                {% endif %}-->
+                                <option value="">Wybierz kuchnię</option>
+                                {% for cuisine in cuisines %}
+                                    <option value="{{ cuisine['cuisine'] }}">{{ cuisine['cuisine'] }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <select class="price" name="price">
+<!--                                {% if saved_price is not defined or  saved_price == ''%}-->
+<!--                                    <option value="{{ saved_price }}">Wybierz zakres cenowy</option>-->
+<!--                                {% else %}-->
+<!--                                    {% if saved_price == 'other' %}-->
+<!--                                    <option value="{{ saved_price }}">powyżej 200</option>-->
+<!--                                    {% else %}-->
+<!--                                    <option value="{{ saved_price }}">do {{ saved_price }}</option>-->
+<!--                                    {% endif %}-->
+<!--                                {% endif %}-->
+                                <option value="0">Wybierz zakres cenowy</option>
+                                <option value="20">do 20</option>
+                                <option value="40">do 40</option>
+                                <option value="60">do 60</option>
+                                <option value="80">do 80</option>
+                                <option value="100">do 100</option>
+                                <option value="150">do 150</option>
+                                <option value="200">do 200</option>
+<!--                                <option value="other">powyżej 200</option>-->
+                            </select>
+
+                            <select class="ratings" name="ratings">
+<!--                                {% if saved_ratings is not defined or  saved_ratings == ''%}-->
+<!--                                    <option value="{{ saved_ratings }}">Wybierz ocenę</option>-->
+<!--                                {% else %}}-->
+<!--                                    <option value="{{ saved_ratings }}">{{ saved_ratings }}</option>-->
+<!--                                {% endif %}-->
+                                <option value="0">Wybierz ocenę</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+
+                            <select class="distance" name="distance">
+<!--                                {% if saved_distance is not defined or  saved_distance == ''%}-->
+<!--                                    <option value="{{ saved_distance }}">Wybierz odległość</option>-->
+<!--                                {% else %}}-->
+<!--                                    {% if saved_distance == 'other' %}-->
+<!--                                    <option value="{{ saved_distance }}">powyżej 15km</option>-->
+<!--                                    {% else %}-->
+<!--                                    <option value="{{ saved_distance }}">do {{ saved_distance }}km</option>-->
+<!--                                    {% endif %}-->
+<!--                                {% endif %}-->
+                                <option value="0">Wybierz odległość</option>
+                                <option value="2">do 2km</option>
+                                <option value="5">do 5km</option>
+                                <option value="8">do 8km</option>
+                                <option value="10">do 10km</option>
+                                <option value="15">do 15km</option>
+<!--                                <option value="other">powyżej 15km</option>-->
+                            </select>
+                        </div>
+
+                        <div class="col d-flex flex-column align-items-center weight-column">
+                            <select class="cuisine-weight" name="cuisine_weight">
+
+<!--                                {% if saved_cuisine_weight is not defined or  saved_cuisine_weight == '0'%}-->
+<!--                                    <option value="0">0</option>-->
+<!--                                {% else %}}-->
+<!--                                    <option value="{{ saved_cuisine_weight }}">{{ saved_cuisine_weight }}</option>-->
+<!--                                {% endif %}-->
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                            </select>
+
+                            <select class="price-weight" name="price_weight">
+<!--                                {% if saved_price_weight is not defined or  saved_price_weight == '0'%}-->
+<!--                                    <option value="0">0</option>-->
+<!--                                {% else %}}-->
+<!--                                    <option value="{{ saved_price_weight }}">{{ saved_price_weight }}</option>-->
+<!--                                {% endif %}-->
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                            </select>
+
+                            <select class="ratings-weight" name="ratings_weight">
+<!--                                {% if saved_ratings_weight is not defined or  saved_ratings_weight == '0'%}-->
+<!--                                    <option value="0">0</option>-->
+<!--                                {% else %}}-->
+<!--                                    <option value="{{ saved_ratings_weight }}">{{ saved_ratings_weight }}</option>-->
+<!--                                {% endif %}-->
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                            </select>
+
+                            <select class="distance-weight" name="distance_weight">
+<!--                                {% if saved_distance_weight is not defined or  saved_distance_weight == '0'%}-->
+<!--                                    <option value="0">0</option>-->
+<!--                                {% else %}}-->
+<!--                                    <option value="{{ saved_distance_weight }}">{{ saved_distance_weight }}</option>-->
+<!--                                {% endif %}-->
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+
+<!--                <form id="saveButton" method="POST" action="/account">-->
+                <div class="col d-flex align-items-center justify-content-left save-column">
+                    {% if current_user.is_authenticated %}
+                    <div class="save-filters">
+                        <button name="submitType" value="save" type="submit" class="btn btn-save">SAVE</button>
+                    </div>
+                    {% else %}
+                    <div class="save-filters">
+                        <a href="/login" class="btn btn-save">SAVE</a>
+                    </div>
+                    {% endif %}
+                </div>
+<!--                </form>-->
             </div>
 
-            <div class="col filters-column">
-                <div class="row filters-label-row">
-                    <div class="col second-label">
-                        <span class="filters-label">FILTERS</span>
-                    </div>
-                    <div class="col">
-                        <span class="importance-label">IMPORTANCE</span>
-                    </div>
-                </div>
-                <div class="row filters-params-row">
-                    <div class="col d-flex flex-column align-items-center filters-params">
-                        <select class="cuisine">
-                          <option value="other">Wybierz kuchnię</option>
-                            {% for cuisine in cuisines %}
-                                <option value="{{ cuisine }}">{{ cuisine['cuisine'] }}</option>
-                            {% endfor %}
-                        </select>
 
-                        <select class="price">
-                            <option value="other">Wybierz zakres cenowy</option>
-                            <option value="20">do 20</option>
-                            <option value="40">do 40</option>
-                            <option value="60">do 60</option>
-                            <option value="80">do 80</option>
-                            <option value="100">do 100</option>
-                            <option value="150">do 150</option>
-                            <option value="200">do 200</option>
-                            <option value="other">powyżej 200</option>
-                        </select>
-
-                        <select class="ratings">
-                            <option value="other">Wybierz ocenę</option>
-                            <option value="1.0">1.0</option>
-                            <option value="2.0">2.0</option>
-                            <option value="3.0">3.0</option>
-                            <option value="4.0">4.0</option>
-                            <option value="5.0">5.0</option>
-                        </select>
-
-                        <select class="distance">
-                            <option value="other">Wybierz odległość</option>
-                            <option value="2.0">do 2km</option>
-                            <option value="5.0">do 5km</option>
-                            <option value="8.0">do 8km</option>
-                            <option value="10.0">do 10km</option>
-                            <option value="15.0">do 15km</option>
-                            <option value="other">powyżej 15km</option>
-                        </select>
-                    </div>
-
-                    <div class="col d-flex flex-column align-items-center weight-column">
-                        <select class="cuisine-weight">
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
-
-                        <select class="price-weight">
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
-
-                        <select class="ratings-weight">
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
-
-                        <select class="distance-weight">
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
-                    </div>
-                </div>
+            <div class="find-restaurant">
+<!--                <button id="showCarousel" type="submit" class="btn btn-find">MATCH</button>-->
+                <button type="submit" name="submitType" value="getLocation" class="btn btn-find">MATCH</button>
             </div>
 
-            <div class="col d-flex align-items-center justify-content-left save-column">
-                {% if current_user.is_authenticated %}
-                <div class="save-filters">
-                    <button class="btn btn-save">SAVE</button>
-                </div>
-                {% else %}
-                <div class="save-filters">
-                    <a href="/login" class="btn btn-save">SAVE</a>
-                </div>
-                {% endif %}
-            </div>
+        </form>
         </div>
 
-        <div class="find-restaurant">
-            <button id="showCarousel" class="btn btn-find">MATCH</button>
-        </div>
-
-        <div class="find-restaurant">
-            <form id="matchForm" method="POST" action="">
-                <select name="wybrane_opcje">
-                  <option value="opcja1">Opcja 1</option>
-                  <option value="opcja2">Opcja 2</option>
-                  <option value="opcja3">Opcja 3</option>
-                </select>
-
-                <input  name="latitude" id="latitude">
-                <input type="hidden" name="longitude" id="longitude">
-
-                <button id="match" type="submit" class="btn btn-find">MATCH</button>
-
-            </form>
-
-        </div>
-
-
-        <h1>Udostępnij lokalizację</h1>
-    <button onclick="getLocation()">Pobierz lokalizację</button>
+<!-- <h1>Pobierz lokalizację użytkownika</h1>-->
+<!--    <button onclick="getLocation()">Pobierz lokalizację</button>-->
 
 
 <!--        karuzela wiiiiiiiiiiiiiiii-->
-        <div id="myCarousel" class="carousel slide karuzela" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-          </ol>
 
-          <div class="carousel-inner text-center">
-            <div class="carousel-item active">
-              <img src="static/pictures/fryty.gif" alt="Obraz 1">
-              <div class="carousel-caption">
-                <h3>Opis 1</h3>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img src="static/pictures/fryty.gif" alt="Obraz 2">
-              <div class="carousel-caption">
-                <h3>Opis 2</h3>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img src="static/pictures/fryty.gif" alt="Obraz 3">
-              <div class="carousel-caption">
-                <h3>Opis 3</h3>
-              </div>
-            </div>
-          </div>
+            <div id="myCarousel" class="carousel slide karuzela" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+              </ol>
 
-          <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Poprzedni</span>
-          </a>
-          <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Następny</span>
-          </a>
-        </div>
+              <div class="carousel-inner text-center">
+                <div class="carousel-item active">
+                  <img src="static/pictures/fryty.gif" alt="Obraz 1">
+                  <div class="carousel-caption">
+                    <h3>Opis 1</h3>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img src="static/pictures/fryty.gif" alt="Obraz 2">
+                  <div class="carousel-caption">
+                    <h3>Opis 2</h3>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img src="static/pictures/fryty.gif" alt="Obraz 3">
+                  <div class="carousel-caption">
+                    <h3>Opis 3</h3>
+                  </div>
+                </div>
+              </div>
+
+              <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Poprzedni</span>
+              </a>
+              <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Następny</span>
+              </a>
+            </div>
+
 
 
         <script type="text/javascript">
@@ -188,51 +230,6 @@
                     myCarousel.style.display = 'block';
                 });
             }
-        </script>
-
-        <script>
-              $(document).ready(function() {
-                  $('#matchForm').submit(function(event) {
-                    event.preventDefault(); // Zapobieganie domyślnemu zachowaniu formularza
-
-                    // Pobranie wybranych filtrów
-                    var filters = [];
-                    $('input[name="filter"]:checked').each(function() {
-                      filters.push($(this).val());
-                    });
-
-                    // Pobranie lokalizacji użytkownika
-                    if (navigator.geolocation) {
-                      navigator.geolocation.getCurrentPosition(function(position) {
-                        var latitude = position.coords.latitude;
-                        var longitude = position.coords.longitude;
-
-                        // Wysłanie danych do serwera za pomocą AJAX
-                        $.ajax({
-                          type: 'POST',
-                          url: '/match',
-                          data: {
-                            filter: filters,
-                            latitude: latitude,
-                            longitude: longitude
-                          },
-                          success: function(response) {
-                            // Obsługa odpowiedzi serwera
-                            var results = response.results;
-                            // Wyświetlenie karuzeli z wynikami
-                            // Tutaj umieść kod do wyświetlenia karuzeli na stronie
-                            $('#karuzela').html('Karuzela z wynikami');
-                          },
-                          error: function() {
-                            alert('Wystąpił błąd podczas pobierania wyników.');
-                          }
-                        });
-                      });
-                    } else {
-                      alert('Twoja przeglądarka nie obsługuje Geolocation API.');
-                    }
-                  });
-                });
         </script>
     </div>
 {% endblock content%}

@@ -104,6 +104,41 @@ h1, h2, h3, h4, h5, h6 {
     color: #c2bfbf;
 }
 
+.match-account-btn {
+    display: inline-block;
+    border-radius: 30px;
+    border: 8px solid white;
+    background-color: #EBAC33; /* Kolor tła guzika */
+    color: white; /* Kolor tekstu w guziku */
+    font-size: 20px;
+    font-family: 'Neucha', cursive;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin: 10px;
+}
+.match-account-btn:hover {
+    background-color: #e7a41f; /* Kolor tła guzika */
+    border: 8px solid #c2bfbf;
+    color: #c2bfbf;
+}
+
+.delete-button {
+    background-color: #ee23a7; /* Kolor tła guzika */
+    color: white; /* Kolor tekstu w guziku */
+    font-size: 20px;
+    font-family: 'Neucha', cursive;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+}
+
+.delete-button:hover {
+    background-color: #d564a2; /* Kolor tła guzika */
+    color: white;
+}
+
 .match-button .arrow-img {
     text-align: center;
 }

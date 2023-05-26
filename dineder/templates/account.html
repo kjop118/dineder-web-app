@@ -17,6 +17,41 @@
         <div class="preferences">
             <div class="filters">
                 <p class="fav-filters">Saved filters</p>
+                {% for preference in preferences %}
+                <table class="table preferences-table">
+
+                    <thead>
+                        <th>Cuisine</th>
+                        <th>Cuisine Importance</th>
+                        <th>Price</th>
+                        <th>Price_importance</th>
+                        <th>Ratings</th>
+                        <th>Ratings_importance</th>
+                        <th>Distance</th>
+                        <th>Distance_importance</th>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ preference['cuisine'] }}</td>
+                            <td>{{ preference['cuisine_importance'] }}</td>
+                            <td>{{ preference['price'] }}</td>
+                            <td>{{ preference['price_importance'] }}</td>
+                            <td>{{ preference['ratings'] }}</td>
+                            <td>{{ preference['ratings_importance'] }}</td>
+                            <td>{{ preference['distance'] }}</td>
+                            <td>{{ preference['distance_importance'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    <form action="" method="POST">
+                        <button name="accountButtonType" value="matchRestaurant" class="btn match-account-btn">MATCH</button>
+                        <input type="hidden" name="preference_id" value="{{ preference['id'] }}">
+                        <button name="accountButtonType" value="" class="btn delete-button" type="submit">DELETE PREFERENCE</button>
+<!--                    <button type="submit" class="btn delete-button" value="{{ preference['id'] }}"  name="delete-button">DELETE PREFERENCE</button>-->
+                    </form>
+            {% endfor %}
+
             </div>
         </div>
 
