@@ -30,14 +30,10 @@
                             <select class="cuisine" name="cuisine">
                                 {% if matchChoice['cuisine'] is not defined %}
                                     <option value="" selected>Wybierz kuchnię</option>
-<!--                                {% else %}-->
-<!--                                    <option value="{{ matchChoice['cuisine'] }}">{{ matchChoice['cuisine'] }}</option>-->
+                                {% else %}
+                                    <option value="">Wybierz kuchnię</option>
                                 {% endif %}
-<!--                                <option value="">Wybierz kuchnię</option>-->
-<!--                                    <option value="" disabled selected>Wybierz kuchnię</option>-->
-<!--                                <option value=""-->
-<!--                                {% if matchChoice['cuisine'] }}" == "{{ cuisine['cuisine'] }}" %}selected{% endif %}>-->
-<!--                                            {{ cuisine['cuisine'] }}>Wybierz kuchnię</option>-->
+
                                 {% for cuisine in cuisines %}
                                     {% if matchChoice['cuisine'] == cuisine['cuisine'] %}
                                     <option value="{{ cuisine['cuisine'] }}" selected>{{ cuisine['cuisine'] }}</option>
@@ -49,109 +45,290 @@
 
                             <select class="price" name="price">
                                 {% if matchChoice['price'] is not defined %}
-                                    <option value="0">Wybierz zakres cenowy</option>
+                                    <option value="0" selected>Wybierz zakres cenowy</option>
                                 {% else %}
-                                    <option value="0">{{ matchChoice['price'] }}</option>
+                                    <option value="0">Wybierz zakres cenowy</option>
                                 {% endif %}
-<!--                                <option value="0">Wybierz zakres cenowy</option>-->
-                                <option value="20">do 20</option>
-                                <option value="40">do 40</option>
-                                <option value="60">do 60</option>
-                                <option value="80">do 80</option>
-                                <option value="100">do 100</option>
-                                <option value="150">do 150</option>
-                                <option value="200">do 200</option>
+
+                                {% if matchChoice['price'] == 20 %}
+                                    <option value="20" selected>do 20</option>
+                                {% else %}
+                                    <option value="20">do 20</option>
+                                {% endif %}
+
+                                {% if matchChoice['price'] == 40 %}
+                                    <option value="40" selected>do 40</option>
+                                {% else %}
+                                    <option value="40">do 40</option>
+                                {% endif %}
+
+                                {% if matchChoice['price'] == 60 %}
+                                    <option value="60" selected>do 60</option>
+                                {% else %}
+                                    <option value="60">do 60</option>
+                                {% endif %}
+
+                                {% if matchChoice['price'] == 80 %}
+                                    <option value="80" selected>do 80</option>
+                                {% else %}
+                                    <option value="80">do 80</option>
+                                {% endif %}
+
+                                {% if matchChoice['price'] == 100 %}
+                                    <option value="100" selected>do 100</option>
+                                {% else %}
+                                    <option value="100">do 100</option>
+                                {% endif %}
+
+                                {% if matchChoice['price'] == 150 %}
+                                    <option value="150" selected>do 150</option>
+                                {% else %}
+                                    <option value="150">do 150</option>
+                                {% endif %}
+
+                                {% if matchChoice['price'] == 200 %}
+                                    <option value="200" selected>do 200</option>
+                                {% else %}
+                                    <option value="200">do 200</option>
+                                {% endif %}
+
 <!--                                <option value="other">powyżej 200</option>-->
                             </select>
 
                             <select class="ratings" name="ratings">
                                 {% if matchChoice['ratings'] is not defined%}
-                                    <option value="0">Wybierz ocenę</option>
+                                    <option value="0" selected>Wybierz ocenę</option>
                                 {% else %}}
-                                    <option value="0">{{ matchChoice['ratings'] }}</option>
+                                    <option value="0">Wybierz zakres cenow</option>
                                 {% endif %}
-<!--                                <option value="0">Wybierz ocenę</option>-->
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
+
+                                {% if matchChoice['ratings'] == 1 %}
+                                    <option value="1" selected>1</option>
+                                {% else %}
+                                    <option value="1">1</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings'] == 2 %}
+                                    <option value="2" selected>2</option>
+                                {% else %}
+                                    <option value="2">2</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings'] == 3 %}
+                                    <option value="3" selected>3</option>
+                                {% else %}
+                                    <option value="3">3</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings'] == 4 %}
+                                    <option value="4" selected>4</option>
+                                {% else %}
+                                    <option value="4">4</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings'] == 5 %}
+                                    <option value="5" selected>5</option>
+                                {% else %}
+                                    <option value="5">5</option>
+                                {% endif %}
                             </select>
 
                             <select class="distance" name="distance">
                                 {% if matchChoice['distance'] is not defined %}
-                                    <option value="0">Wybierz odległość</option>
+                                    <option value="0" selected>Wybierz odległość</option>
                                 {% else %}}
-                                    <option value="0">do {{ matchChoice['distance'] }}km</option>
+                                    <option value="0">Wybierz odległość</option>
                                 {% endif %}
-<!--                                <option value="0">Wybierz odległość</option>-->
-                                <option value="2">do 2km</option>
-                                <option value="5">do 5km</option>
-                                <option value="8">do 8km</option>
-                                <option value="10">do 10km</option>
-                                <option value="15">do 15km</option>
+
+                                {% if matchChoice['distance'] == 2 %}
+                                    <option value="2" selected>do 2km</option>
+                                {% else %}
+                                    <option value="2">do 2km</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance'] == 5 %}
+                                    <option value="5" selected>do 5km</option>
+                                {% else %}
+                                    <option value="5">do 5km</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance'] == 8 %}
+                                    <option value="8" selected>do 8km</option>
+                                {% else %}
+                                    <option value="8">do 8km</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance'] == 10 %}
+                                    <option value="10" selected>do 10km</option>
+                                {% else %}
+                                    <option value="10">do 10km</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance'] == 15 %}
+                                    <option value="15" selected>do 15km</option>
+                                {% else %}
+                                    <option value="15">do 15km</option>
+                                {% endif %}
 <!--                                <option value="other">powyżej 15km</option>-->
                             </select>
                         </div>
 
                         <div class="col d-flex flex-column align-items-center weight-column">
                             <select class="cuisine-weight" name="cuisine_weight">
-
                                 {% if matchChoice['cuisine_weight'] is not defined %}
-                                    <option value="0">0</option>
+                                    <option value="0" selected>0</option>
                                 {% else %}}
-                                    <option value="0">{{ matchChoice['cuisine_weight'] }}</option>
+                                    <option value="0">0</option>
                                 {% endif %}
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                  <option value="5">5</option>
+
+                                {% if matchChoice['cuisine_weight'] == 1 %}
+                                    <option value="1" selected>1</option>
+                                {% else %}
+                                    <option value="1">1</option>
+                                {% endif %}
+
+                                {% if matchChoice['cuisine_weight'] == 2 %}
+                                    <option value="2" selected>2</option>
+                                {% else %}
+                                    <option value="2">2</option>
+                                {% endif %}
+
+                                {% if matchChoice['cuisine_weight'] == 3 %}
+                                    <option value="3" selected>3</option>
+                                {% else %}
+                                    <option value="3">3</option>
+                                {% endif %}
+
+                                {% if matchChoice['cuisine_weight'] == 4 %}
+                                    <option value="4" selected>4</option>
+                                {% else %}
+                                    <option value="4">4</option>
+                                {% endif %}
+
+                                {% if matchChoice['cuisine_weight'] == 5 %}
+                                    <option value="5" selected>5</option>
+                                {% else %}
+                                    <option value="5">5</option>
+                                {% endif %}
                             </select>
 
                             <select class="price-weight" name="price_weight">
                                 {% if matchChoice['price_weight'] is not defined%}
-                                    <option value="0">0</option>
+                                    <option value="0" selected>0</option>
                                 {% else %}}
-                                    <option value="{{ matchChoice['price_weight'] }}">{{ matchChoice['price_weight'] }}</option>
+                                    <option value="0">0</option>
                                 {% endif %}
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                  <option value="5">5</option>
+
+                                {% if matchChoice['price_weight'] == 1 %}
+                                    <option value="1" selected>1</option>
+                                {% else %}
+                                    <option value="1">1</option>
+                                {% endif %}
+
+                                {% if matchChoice['price_weight'] == 2 %}
+                                    <option value="2" selected>2</option>
+                                {% else %}
+                                    <option value="2">2</option>
+                                {% endif %}
+
+                                {% if matchChoice['price_weight'] == 3 %}
+                                    <option value="3" selected>3</option>
+                                {% else %}
+                                    <option value="3">3</option>
+                                {% endif %}
+
+                                {% if matchChoice['price_weight'] == 4 %}
+                                    <option value="4" selected>4</option>
+                                {% else %}
+                                    <option value="4">4</option>
+                                {% endif %}
+
+                                {% if matchChoice['price_weight'] == 5 %}
+                                    <option value="5" selected>5</option>
+                                {% else %}
+                                    <option value="5">5</option>
+                                {% endif %}
                             </select>
 
                             <select class="ratings-weight" name="ratings_weight">
                                 {% if matchChoice['ratings_weight'] is not defined %}
-                                    <option value="0">0</option>
+                                    <option value="0" selected>0</option>
                                 {% else %}}
-                                    <option value="{{ matchChoice['ratings_weight'] }}">{{ matchChoice['ratings_weight'] }}</option>
+                                    <option value="0">0</option>
                                 {% endif %}
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                  <option value="5">5</option>
+
+                                {% if matchChoice['ratings_weight'] == 1 %}
+                                    <option value="1" selected>1</option>
+                                {% else %}
+                                    <option value="1">1</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings_weight'] == 2 %}
+                                    <option value="2" selected>2</option>
+                                {% else %}
+                                    <option value="2">2</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings_weight'] == 3 %}
+                                    <option value="3" selected>3</option>
+                                {% else %}
+                                    <option value="3">3</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings_weight'] == 4 %}
+                                    <option value="4" selected>4</option>
+                                {% else %}
+                                    <option value="4">4</option>
+                                {% endif %}
+
+                                {% if matchChoice['ratings_weight'] == 5 %}
+                                    <option value="5" selected>5</option>
+                                {% else %}
+                                    <option value="5">5</option>
+                                {% endif %}
                             </select>
 
                             <select class="distance-weight" name="distance_weight">
                                 {% if matchChoice['distance_weight'] is not defined%}
-                                    <option value="0">0</option>
+                                    <option value="0" selected>0</option>
                                 {% else %}}
-                                    <option value="{{ matchChoice['distance_weight'] }}">{{ matchChoice['distance_weight'] }}</option>
+                                    <option value="0">0</option>
                                 {% endif %}
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                  <option value="5">5</option>
+
+                                {% if matchChoice['distance_weight'] == 1 %}
+                                    <option value="1" selected>1</option>
+                                {% else %}
+                                    <option value="1">1</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance_weight'] == 2 %}
+                                    <option value="2" selected>2</option>
+                                {% else %}
+                                    <option value="2">2</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance_weight'] == 3 %}
+                                    <option value="3" selected>3</option>
+                                {% else %}
+                                    <option value="3">3</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance_weight'] == 4 %}
+                                    <option value="4" selected>4</option>
+                                {% else %}
+                                    <option value="4">4</option>
+                                {% endif %}
+
+                                {% if matchChoice['distance_weight'] == 5 %}
+                                    <option value="5" selected>5</option>
+                                {% else %}
+                                    <option value="5">5</option>
+                                {% endif %}
                             </select>
                         </div>
                     </div>
                 </div>
 
-<!--                <form id="saveButton" method="POST" action="/account">-->
                 <div class="col d-flex align-items-center justify-content-left save-column">
                     {% if current_user.is_authenticated %}
                     <div class="save-filters">
@@ -163,76 +340,60 @@
                     </div>
                     {% endif %}
                 </div>
-<!--                </form>-->
             </div>
 
 
             <div class="find-restaurant">
-<!--                <button id="showCarousel" type="submit" class="btn btn-find">MATCH</button>-->
                 <button type="submit" name="submitType" value="getLocation" class="btn btn-find">MATCH</button>
             </div>
-
-            {% for matchedRestaurant in matchedRestaurants %}
-                <span>{{ matchedRestaurants['rest_name'] }}</span>
-            {% endfor %}
         </form>
-
-
         </div>
 
+        {% if matchedRestaurants|length < 1 %}
+            <span>Brak restauracji spełniającej kryteria</span>
+        {% endif %}
 
-<!--        <div id="myCarousel" class="carousel slide karuzela" data-ride="carousel">-->
-<!--            {% for matchRestaurant in matchRestaurants %}-->
-<!--                <label>{{ matchRestaurants['rest_name'] }}</label>-->
-<!--            {% endfor %}-->
-<!--              <ol class="carousel-indicators">-->
-<!--                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
-<!--                <li data-target="#myCarousel" data-slide-to="1"></li>-->
-<!--                <li data-target="#myCarousel" data-slide-to="2"></li>-->
-<!--              </ol>-->
+        <div id="myCarousel" class="carousel slide karuzela" data-ride="carousel">
+              <ol class="carousel-indicators">
+                  {% for matchedRestaurants in matchedRestaurants %}
+                  <li data-target="#myCarousel" data-slide-to="{{ loop.index }}" {% if loop.index == 1 %}class="active"{% endif %}></li>
+                  {% endfor %}
+              </ol>
 
-<!--              <div class="carousel-inner text-center">-->
-<!--                <div class="carousel-item active">-->
-<!--                  <img src="static/pictures/fryty.gif" alt="Obraz 1">-->
-<!--                  <div class="carousel-caption">-->
-<!--                    <h3>Opis 1</h3>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="carousel-item">-->
-<!--                  <img src="static/pictures/fryty.gif" alt="Obraz 2">-->
-<!--                  <div class="carousel-caption">-->
-<!--                    <h3>Opis 2</h3>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="carousel-item">-->
-<!--                  <img src="static/pictures/fryty.gif" alt="Obraz 3">-->
-<!--                  <div class="carousel-caption">-->
-<!--                    <h3>Opis 3</h3>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
+              <div class="carousel-inner text-center">
+                  {% for matchedRestaurants in matchedRestaurants %}
+                  {% if loop.index == 1 %}
+                    <div class="carousel-item active">
+                      <img src="static/pictures/restaurant.png" alt="Obraz {{ loop.index }}">
+                        <p>{{ matchedRestaurants['rest_name'] }}</p>
+                        <button>Add to favoutives</button>
+<!--                      <div class="carousel-caption">-->
+<!--                        <h3>Opis 1</h3>-->
+<!--                      </div>-->
+                    </div>
+                  {% else %}
+                  <div class="carousel-item">
+                      <img src="static/pictures/restaurant.png" alt="Obraz {{ loop.index }}">
+                      <p>{{ matchedRestaurants['rest_name'] }}</p>
+<!--                      <div class="carousel-caption">-->
+<!--                        <h3>Opis 1</h3>-->
+<!--                      </div>-->
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+              </div>
 
-<!--              <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">-->
-<!--                <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-<!--                <span class="sr-only">Poprzedni</span>-->
-<!--              </a>-->
-<!--              <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">-->
-<!--                <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
-<!--                <span class="sr-only">Następny</span>-->
-<!--              </a>-->
-<!--        </div>-->
+            {% if matchedRestaurants|length > 0 %}
+              <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Poprzedni</span>
+              </a>
+              <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Następny</span>
+              </a>
+            {% endif %}
+        </div>
 
-
-
-<!--        <script type="text/javascript">-->
-<!--            const btn = document.getElementById('showCarousel');-->
-<!--            console.log(btn)-->
-<!--            if (btn) {-->
-<!--                btn.addEventListener('click', function () {-->
-<!--                    var myCarousel = document.getElementById('myCarousel');-->
-<!--                    myCarousel.style.display = 'block';-->
-<!--                });-->
-<!--            }-->
-<!--        </script>-->
     </div>
 {% endblock content%}
