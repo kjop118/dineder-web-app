@@ -2,7 +2,33 @@
 {% block content %}
 <div class="container-restaurants">
     <div class="fav-restaurants">
-        <p class="restaurants">FAVOURITE RESTAURANTS</p>
+        {% for favRestaurant in favRestaurants %}
+                <table class="table preferences-table">
+
+                    <thead>
+                        <th>Restaurant Name</th>
+                        <th>Cuisine</th>
+                        <th>Online Order</th>
+                        <th>Book Table</th>
+                        <th>Rate</th>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>{{ favRestaurant.restaurant['rest_name'] }}</td>
+                            <td>{{ favRestaurant.cuisines }}</td>
+                            <td>{{ favRestaurant.restaurant['online_order'] }}</td>
+                            <td>{{ favRestaurant.restaurant['book_table'] }}</td>
+                            <td>{{ favRestaurant.restaurant['rate'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form action="" method="POST">
+                        <input type="hidden" name="favRestaurant_id" value="{{ loop.index }}">
+                        <button name="favRestButton" value="deleteRestaurant" class="btn delete-button" type="submit">DELETE</button>
+                    </form>
+
+            {% endfor %}
     </div>
 </div>
 {% endblock content%}

@@ -519,11 +519,37 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .carousel-indicators {
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    margin-top: 70px;
     left: 0;
     right: 0;
-    margin: 0;
     padding: 0;
     text-align: center;
+}
+
+.serce {
+    width: 40px;
+    height: auto;
+    background-size: cover;
+    background-position: center;
+    margin-top: 20px;
+
+}
+
+.image-button {
+    border-color: rgba(221, 221, 221, 0);
+    background-color: rgba(121, 32, 32, 0);
+}
+
+.rest-name {
+    font-family: 'Neucha', cursive;
+    font-size: 40px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.obraz-karuzela {
+    width: 700px;
+    height: auto;
+    border-radius: 20px;
 }

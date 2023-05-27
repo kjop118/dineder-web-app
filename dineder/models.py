@@ -46,6 +46,7 @@ class Restaurants(db.Model):
     def __repr__(self):
         return '<Restaurant %r>' % self.rest_name
 
+
 class UserRestaurant(db.Model):
     __tablename__ = 'user_restaurant'
     id = db.Column(db.Integer, primary_key=True)
@@ -55,6 +56,7 @@ class UserRestaurant(db.Model):
     def __repr__(self):
         return '<FAV RESTAURANT for user %r>' % self.user_id
 
+
 class Cuisines(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cuisine = db.Column(db.String(300), nullable=False)
@@ -62,6 +64,7 @@ class Cuisines(db.Model):
 
     def __repr__(self):
         return '<Cuisine %r>' % self.cuisine
+
 
 class CuisinesRestaurants(db.Model):
     __tablename__ = 'cuisine_restaurant'
@@ -88,6 +91,7 @@ class Preferences(db.Model):
     def __repr__(self):
         return f"User preferences('{self.cuisine}', '{self.price}', '{self.ratings}', '{self.distance}')"
 
+
 class MatchedRestaurants(db.Model):
     __tablename__ = 'matched_restaurants'
     id = db.Column(db.Integer, primary_key=True)
@@ -101,9 +105,9 @@ class MatchedRestaurants(db.Model):
     longitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
 
-
     def __repr__(self):
         return '<Matched Restaurant %r>' % self.rest_name
+
 
 class TempMatchTable(db.Model):
     __tablename__ = 'temp_match_table'
@@ -116,7 +120,6 @@ class TempMatchTable(db.Model):
     ratings_weight = db.Column(db.Integer, nullable=False)
     distance = db.Column(db.String(300), nullable=False)
     distance_weight = db.Column(db.Integer, nullable=False)
-
 
     def __repr__(self):
         return '<Temp Matched Choice%r>' % self.cuisine

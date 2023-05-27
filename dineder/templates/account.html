@@ -45,9 +45,9 @@
                     </tbody>
                 </table>
                     <form action="" method="POST">
-                        <button name="accountButtonType" value="matchRestaurant" class="btn match-account-btn">MATCH</button>
+                        <button name="accountButtonType" value="getLocation" class="btn match-account-btn">MATCH</button>
                         <input type="hidden" name="preference_id" value="{{ preference['id'] }}">
-                        <button name="accountButtonType" value="" class="btn delete-button" type="submit">DELETE PREFERENCE</button>
+                        <button name="accountButtonType" value="deleteFilter" class="btn delete-button" type="submit">DELETE PREFERENCE</button>
 <!--                    <button type="submit" class="btn delete-button" value="{{ preference['id'] }}"  name="delete-button">DELETE PREFERENCE</button>-->
                     </form>
             {% endfor %}
