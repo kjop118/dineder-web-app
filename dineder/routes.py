@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from dineder import app, db, bcrypt
 from dineder.forms import RegistrationForm, LoginForm
-from dineder.models import Users, Restaurants, Cuisines, CuisinesRestaurants, UserRestaurant, Preferences
+from dineder.models import Users, Restaurants, Cuisines, CuisinesRestaurants, UserRestaurant, Preferences, MatchedRestaurants, TempMatchTable
 from flask_login import login_user, current_user, logout_user, login_required
 import numpy as np
 import requests
@@ -11,18 +11,30 @@ from geopy.distance import geodesic
 @app.route("/")
 @app.route("/home")
 def home():
-    # posts = Post.query.all();
+    matchChoice = TempMatchTable.query.first()
+    # print(matchChoice)
+    if matchChoice:
+        db.session.delete(matchChoice)
+        db.session.commit()
     return render_template('home.html')
 
 
 @app.route("/about")
 def about():
-    # posts = Post.query.all();
+    matchChoice = TempMatchTable.query.first()
+    if matchChoice:
+        db.session.delete(matchChoice)
+        db.session.commit()
     return render_template('about.html', title="ABOUT")
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    matchChoice = TempMatchTable.query.first()
+    if matchChoice:
+        db.session.delete(matchChoice)
+        db.session.commit()
+
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = RegistrationForm()
@@ -40,6 +52,11 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    matchChoice = TempMatchTable.query.first()
+    if matchChoice:
+        db.session.delete(matchChoice)
+        db.session.commit()
+
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = LoginForm()
@@ -56,6 +73,11 @@ def login():
 
 @app.route("/logout")
 def logout():
+    matchChoice = TempMatchTable.query.first()
+    if matchChoice:
+        db.session.delete(matchChoice)
+        db.session.commit()
+
     logout_user()
     return redirect(url_for('home'))
 
@@ -63,6 +85,11 @@ def logout():
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    matchChoice = TempMatchTable.query.first()
+    if matchChoice:
+        db.session.delete(matchChoice)
+        db.session.commit()
+
     preferences = Preferences.query.all()
     if request.method == 'POST':
         preference_id = request.form.get('preference_id')
@@ -96,12 +123,19 @@ def account():
 @app.route("/favourite", methods=['GET', 'POST'])
 @login_required
 def getFavRestaurant():
+    matchChoice = TempMatchTable.query.first()
+    if matchChoice:
+        db.session.delete(matchChoice)
+        db.session.commit()
+
     return render_template('fav-restaurant.html', title='LIKE')
 
 
-@app.route("/match-restaurant", methods=['GET', 'POST'])
-def getYourMatch():
+@app.route("/match", methods=['GET', 'POST'])
+def match():
     cuisines = Cuisines.query.all()  # pobranie wszystkich dostępnych rodzajów kuchni z bazy do wyświetlenie ich w liście dla użytkownika
+    matchedRestaurants = MatchedRestaurants.query.all()
+    matchChoice = TempMatchTable.query.first()
 
     if request.method == 'POST':
 
@@ -114,7 +148,23 @@ def getYourMatch():
         ratings_weight = int(request.form.get('ratings_weight'))
         distance_weight = int(request.form.get('distance_weight'))
 
+        if cuisine == "":
+            print('to nie jest istotne')
         params_weights = [cuisine_weight, price_weight, ratings_weight, distance_weight]
+
+        #zapis parametrów do tymczasowej tabeli w celu przechowywania wyników
+        if matchChoice:
+            db.session.delete(matchChoice)
+            db.session.commit()
+
+        matchChoice = TempMatchTable(cuisine=cuisine, cuisine_weight=cuisine_weight, price=price,
+                                  price_weight=price_weight, ratings=ratings, ratings_weight=ratings_weight,
+                                  distance=distance, distance_weight=distance_weight)
+        db.session.add(matchChoice)
+        db.session.commit()
+
+        # if
+
 
         # #sprawdzam dane pobrane od uzytkownika raczej to nie bedzie potrzebne
         # if distance == "other":
@@ -181,7 +231,7 @@ def getYourMatch():
             filtered_restaurants = []
             for rowCuisneRestaurant in rowsCuisneRestaurant:
                 restaurant = Restaurants.query.filter_by(id=rowCuisneRestaurant.restaurant_id).first()
-                filtered_restaurants.append({'name': restaurant.rest_name, 'cuisine': cuisine, 'price_range': restaurant.cost/10,
+                filtered_restaurants.append({'id': restaurant.id,'name': restaurant.rest_name, 'cuisine': cuisine, 'price_range': restaurant.cost/10,
                                'rating': restaurant.rate, 'location': (restaurant.latitude, restaurant.longitude)})
 
 #to na później
@@ -194,22 +244,45 @@ def getYourMatch():
             #         result = location_filter(user_location, distance, result)
 
             # póki co wypisanie co sie udało przefiltrować - dostajemy McD :)
-            for i in filtered_restaurants:
-                print(i)
+            # for i in filtered_restaurants:
+            #     print(i)
 
             # lista tych restauracji do algorytmu ma trafić?
-            result = ahpCalculate(filtered_restaurants, user_location, params_weights, distance)
-            print(result)
+            # result = ahpCalculate(filtered_restaurants, user_location, params_weights, distance)
+            # print(result)
+
+            #tymczasowe przyrównanie
+            result = filtered_restaurants
+
+            #wyczyszczenie tabeli pomocniczej
+            matchedRestaurants = MatchedRestaurants.query.all()
+            print(matchedRestaurants)
+            for matchedRestaurant in matchedRestaurants:
+                db.session.delete(matchedRestaurant)
+                db.session.commit()
+
+            #zapis wyniku do bazy
+            for restaurant in result:
+                match = Restaurants.query.filter_by(id=restaurant['id']).first()
+                matchedRestaurant = MatchedRestaurants(id=match.id, rest_name=match.rest_name, online_order=match.online_order,
+                    book_table=match.book_table, rate=match.rate, votes=match.votes, rest_location=match.rest_location,
+                    cost=match.cost, longitude=match.longitude, latitude=match.latitude)
+                db.session.add(matchedRestaurant)
+                db.session.commit()
+
+            matchedRestaurants = MatchedRestaurants.query.all()
+            print(matchedRestaurants)
 
             # na podstawie cuisine id szukam restauracji które pasują pod to kryterium
             # restaurantsWithSpecificCuisine = CuisinesRestaurants.query.filter_by(cuisine_id=cuisine_id.id).all()
             # print(restaurantsWithSpecificCuisine)
-        return render_template('match.html', title='MATCH', cuisines=cuisines, carusel='true', saved_cuisine=cuisine,
-                               saved_price=price, saved_ratings=ratings, saved_distance=distance,
-                               saved_cuisine_weight=cuisine_weight, saved_price_weight=price_weight,
-                               saved_ratings_weight=ratings_weight, saved_distance_weight=distance_weight)
+        return redirect(url_for('match'))
+        # return render_template('match.html', title='MATCH', cuisines=cuisines, matchedRestaurants=matchedRestaurants, saved_cuisine=cuisine,
+        #                        saved_price=price, saved_ratings=ratings, saved_distance=distance,
+        #                        saved_cuisine_weight=cuisine_weight, saved_price_weight=price_weight,
+        #                        saved_ratings_weight=ratings_weight, saved_distance_weight=distance_weight)
 
-    return render_template('match.html', title='MATCH', cuisines=cuisines, carusel='false')
+    return render_template('match.html', title='MATCH', cuisines=cuisines, matchedRestaurants=matchedRestaurants, matchChoice=matchChoice)
 
 
 def price_filter(price, restaurants):
