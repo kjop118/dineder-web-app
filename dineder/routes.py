@@ -1,3 +1,4 @@
+import math
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from dineder import app, db, bcrypt
 from dineder.forms import RegistrationForm, LoginForm
@@ -8,31 +9,7 @@ from geopy.distance import geodesic
 
 from sqlalchemy import select
 
-
-def price_filter(price, restaurants):
-    result = []
-    for i in restaurants:
-        if i["price_range"] < price:
-            result.append(i)
-    return result
-
-def rating_filter(rating, restaurants):
-    result = []
-    for i in restaurants:
-        if i["rating"] > rating:
-            result.append(i)
-    return result
-
-def location_filter(user_location, allowed_distance, restaurants):
-
-    #tu jeszcze normalizacja była?
-    result = []
-    for restaurant in restaurants:
-         restaurant_location = restaurant['location']
-         distance = geodesic(user_location, restaurant_location).km
-         if distance < allowed_distance:
-             result.append(restaurant)
-    return result
+#def getMatchedRestaurants(user_location, weights, ):
 
 
 @app.route("/")
@@ -101,51 +78,6 @@ def getYourMatch():
     #strony na zakładce /match-restaurant, a nie po przycisku MATCH
     cuisines = Cuisines.query.all()
 
-    # dane, które wpisze user
-    cuisine = 'Afghan'
-    cuisine_w = 5
-    rating = 3.8
-    rating_w = 3
-    price = 700
-    price_w = 4
-    allowed_distance = 27
-    allowed_distance_w = 2
-    # to jakos pobierać
-    user_location = (20, 50)
-
-    # wyznaczanie wag - które filtry będę uwzględnione jako pierwsze
-    weights = []   
-    pair_rating = ("rating", rating_w)
-    pair_price = ("price", price_w)
-    pair_distance = ("allowed_distance", allowed_distance_w)
-    weights.append(pair_rating)
-    weights.append(pair_price)
-    weights.append(pair_distance)
-    weights = sorted(weights,key=lambda x: x[1], reverse=True)
-
-
-    # na podstawie nazwy kuchni pobieram id cusine - kuchnia kryterium, które będzie najważniejsze
-    row_cuisine = Cuisines.query.filter_by(cuisine=cuisine).first()
-    print(row_cuisine.id)
-    rowsCuisneRestaurant = CuisinesRestaurants.query.filter_by(cuisine_id=row_cuisine.id) 
-
-    result = []
-    for rowCuisneRestaurant in rowsCuisneRestaurant:
-        restaurant = Restaurants.query.filter_by(id=rowCuisneRestaurant.restaurant_id).first()
-        result.append({'name': restaurant.rest_name, 'cuisine': cuisine, 'price_range': restaurant.cost, 'rating': restaurant.rate, 'location': (restaurant.longitude, restaurant.latitude)})
-    
-    for i in weights:
-        if i[0] == "price":
-            result = price_filter(price, result)
-        if i[0] == "rating":
-            result = rating_filter(rating, result)
-        if i[0] == "allowed_distance":
-            result = location_filter(user_location, allowed_distance, result)
-
-    #póki co wypisanie co sie udało przefiltrować - dostajemy McD :)
-    for i in result:
-        print(i)
-
     #lista tych restauracji do algorytmu ma trafić? 
 
     
@@ -182,77 +114,109 @@ def getYourMatch():
     return render_template('match.html', title='MATCH', cuisines = cuisines)
 
 
+def calculate_rating_score(rating, user_rating):
+       if rating > user_rating:
+            return 0.9
+       elif rating == user_rating:
+            return 0.8
+       else:
+            return 0.3
 
-def getMatchedRestaurants(user_location, weights, ):
-    user_location = (51.5074, -0.1278)  # Przykładowa lokalizacja użytkownika (Londyn)
-    restaurants_db = Restaurants.query.all()
-    restaurants_all = []
+def calculate_cuisine_score(cuisine, user_cuisne):
+    if cuisine == user_cuisne:
+        return 0.9
+    else:
+        return 0.5
 
-    for restaurant in restaurants_db:
-        restaurants_all.append({'id': restaurant.id, 'name': restaurant.rest_name, 'online_order': restaurant.online_order,
-                            'book_table': restaurant.book_table, 'rating': restaurant.rate, 'votes': restaurant.votes,
-                            'price_range': restaurant.cost, 'rest_location': restaurant.rest_locatio,
-                            'location': (restaurant.latitude, restaurant.longitude)})
+def calculate_price_range_score(price_range, user_price_range):
+    # Implement your own logic to calculate the price range score
+    # This is just a placeholder example
+    if price_range < user_price_range:
+        return 0.9
+    elif price_range == user_price_range:
+        return 0.8
+    else:
+        return 0.4
 
-    restaurants = [
-        {'name': 'Restauracja A', 'cuisine': 'Włoska', 'price_range': 3, 'rating': 4.2, 'location': (51.5115, -0.1160)},
-        {'name': 'Restauracja B', 'cuisine': 'Meksykańska', 'price_range': 2, 'rating': 3.8,
-         'location': (51.5033, -0.1195)},
-        {'name': 'Restauracja C', 'cuisine': 'Francuska', 'price_range': 4, 'rating': 4.5,
-         'location': (51.5067, -0.1340)},
-        # ... Dodaj więcej restauracji
-    ]
+def calculate_location_score(rest_longitude, rest_latitude, user_longitude, user_latitude, allowed_distance):
+    # Implement your own logic to calculate the location score
+    # This is just a placeholder example
+    distance = calculate_distance(rest_longitude, rest_latitude, user_longitude, user_latitude)
 
-    w1 = 3  # Waga dla kryterium Rodzaj kuchni
-    w2 = 2  # Waga dla kryterium Zakres cenowy
-    w3 = 4  # Waga dla kryterium Ocena
-    w4 = 5  # Waga dla kryterium Dystans
-    max_distance_allowed = 5  # Maksymalny dozwolony dystans od użytkownika (w kilometrach)
+    # Normalize the distance value to a score between 0 and 1
+    max_distance = allowed_distance  # Maximum distance considered acceptable
+    normalized_distance = 1.0 - (distance / max_distance)
+    return normalized_distance
 
-    # Obliczanie odległości użytkownika od restauracji
-    distances = []
+def calculate_distance(lon1, lat1, lon2, lat2):
+    # Implement your own distance calculation logic
+    # This is just a placeholder example using the Haversine formula
+    # to calculate the distance between two latitude-longitude points
+    earth_radius = 6371  # Radius of the Earth in kilometers
+
+    lon1_rad = math.radians(lon1)
+    lat1_rad = math.radians(lat1)
+    lon2_rad = math.radians(lon2)
+    lat2_rad = math.radians(lat2)
+
+    delta_lon = lon2_rad - lon1_rad
+    delta_lat = lat2_rad - lat1_rad
+
+    a = math.sin(delta_lat / 2) ** 2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(delta_lon / 2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    distance = earth_radius * c
+    return distance
+
+@app.route("/process_match", methods=['POST'])
+def process_match():
+    restaurants = Restaurants.query.all()
+
+    data = request.get_json()
+    #print(data)
+    user_location_lat = float(data['user_location_lat']) 
+    user_location_long = float(data['user_location_long'])
+    cuisine = data['cuisine']
+    cuisine_w = int(data['cuisene_w'])
+    rating = float(data['rating'])
+    rating_w = int(data['rating_w'])
+    price = ""
+    if (data['price'] == 'powyżej'):
+        price = 10000000
+    else:
+        price = float(data['price'])
+        price = price*10
+    price_w = int(data['price_w'])
+    allowed_distance = ""
+    if (data['allowed_distance'] == 'powyżej'):
+        allowed_distance = 10000000
+    else:
+        allowed_distance = float(data['allowed_distance'])
+    
+    allowed_distance_w = int(data['allowed_distance_w'])
+
+    weighted_scores = []
     for restaurant in restaurants:
-        restaurant_location = restaurant['location']
-        distance = geodesic(user_location, restaurant_location).km
-        distances.append(distance)
+        score = (
+            cuisine_w * calculate_cuisine_score(restaurant.cuisine, cuisine) +
+            price_w * calculate_price_range_score(restaurant.cost, price) +
+            rating_w * calculate_rating_score(restaurant.rate, rating) +
+            allowed_distance_w* calculate_location_score(restaurant.longitude, restaurant.latitude, user_location_long, user_location_lat, allowed_distance)
+        )
+        weighted_scores.append((restaurant, score))
+    
+    sorted_restaurants = sorted(weighted_scores, key=lambda x: x[1], reverse=True)
 
-    # Normalizacja odległości
-    max_distance = max(distances)
-    normalized_distances = [distance / max_distance for distance in distances]
+    top_restaurants = sorted_restaurants[:10]
 
-    # Macierz porównań
-    comparison_matrix = np.array([
-        [1, w1, w2, w3],  # Rodzaj kuchni
-        [1 / w1, 1, w4, w4],  # Zakres cenowy
-        [1 / w2, 1 / w4, 1, w4],  # Ocena
-        [1 / w3, 1 / w4, 1 / w4, 1]  # Dystans
-    ])
+    output = []
+    for restaurant, score in top_restaurants:
+        output.append(f"Restaurant: {restaurant.rest_name}, Score: {score}")
 
-    # Waga dystansu
-    normalized_distances_weight = w4  # Waga dla dystansu (ostatniego kryterium)
+    for i in output:
+        print(i)
 
-    # Uwzględnienie wag dla odległości w macierzy porównań
-    weighted_comparison_matrix = np.copy(comparison_matrix)
-    for i, distance_weight in enumerate(normalized_distances):
-        if distances[i] > max_distance_allowed:
-            distance_weight = 0
+    if len(output) == 0:
+        print("Nie ma dopasowań")
 
-        weighted_comparison_matrix[i][-1] = distance_weight * normalized_distances_weight
-
-    # Obliczanie wag kryteriów
-    sum_column = np.sum(weighted_comparison_matrix, axis=0)
-    criteria_weights = sum_column / np.sum(sum_column)
-
-    # Obliczanie oceny restauracji
-    scores = np.dot(weighted_comparison_matrix, criteria_weights)
-
-    # Sortowanie restauracji w oparciu o ocenę
-    sorted_restaurants = [restaurant for _, restaurant in sorted(zip(scores, restaurants), reverse=True)]
-
-    # Wybór najlepszych 10 restauracji
-    top_10_restaurants = sorted_restaurants[:10]
-
-    # Wyświetlanie wyników
-    for i, restaurant in enumerate(top_10_restaurants):
-        print(
-            f"{i + 1}. {restaurant['name']}: {restaurant['cuisine']}, {restaurant['price_range']}, {restaurant['rating']}")
+    return '\n'.join(output)
