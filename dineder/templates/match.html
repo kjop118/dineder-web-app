@@ -357,41 +357,57 @@
             <div class="find-restaurant">
                 <button type="submit" name="submitType" value="getLocation" class="btn btn-find">MATCH</button>
             </div>
-        </div>
-
 
 
         {% if matchedRestaurants|length < 1 %}
-            <span>Brak restauracji spełniającej kryteria</span>
+            <span class="no-restaurants">Brak restauracji spełniającej kryteria</span>
         {% endif %}
 
         <div id="myCarousel" class="carousel slide karuzela" data-ride="carousel">
               <div class="carousel-inner text-center">
-                  {% for matchedRestaurants in matchedRestaurants %}
-                  {% if loop.index == 1 %}
+                  {% for matchedRestaurant in matchedRestaurants %}
+                  {% if loop.index-1 == 0 %}
                     <div class="carousel-item active">
-                      <img class="obraz-karuzela" src="static/pictures/restaurant.png" alt="Obraz {{ loop.index }}">
-                        <p class="rest-name">{{ matchedRestaurants['rest_name'] }}</p>
-                        <input type="hidden" name="fav-rest-id" value="{{ matchedRestaurants['rest_name'] }}">
-                        <button name="submitType" value="saveRestaurant" type="submit" class="image-button">
-                        <img class="serce" src="static/pictures/default-heart.png" alt="Opis obrazka">
-                      </button>
+                      <img class="obraz-karuzela" src="static/pictures/restaurant{{loop.index}}.jpg" alt="Obraz {{ loop.index }}">
+                        <div>
+                            <span class="rest-name">{{ matchedRestaurant['rest_name'] }}</span>
+                            <input type="hidden" name="fav-rest-name" value="{{ matchedRestaurant['rest_name'] }}">
+                            <button name="submitType" value="{{ matchedRestaurant['rest_name'] }}" type="submit" class="btn image-button">
+                                <img class="serce" src="static/pictures/default-heart.png" alt="Opis obrazka">
+                            </button>
+                        </div>
+                        <div class="restaurant-info">
+                            <p>Online order: {{ matchedRestaurant['rest_name'] }}</p>
+                            <p>Book table: {{ matchedRestaurant['book_table'] }}</p>
+                            <p>Rate: {{ matchedRestaurant['rate'] }}</p>
+                            <p>Location: {{ matchedRestaurant['rest_location'] }}</p>
+                            <p>Average cost: {{ matchedRestaurant['cost'] }}</p>
+                        </div>
                     </div>
                   {% else %}
                   <div class="carousel-item">
-                      <img class="obraz-karuzela" src="static/pictures/restaurant.png" alt="Obraz {{ loop.index }}">
-                      <p class="rest-name">{{ matchedRestaurants['rest_name'] }}</p>
-                       <input type="hidden" name="fav-rest-id" value="{{ matchedRestaurants['rest_name'] }}">
-                      <button name="submitType" value="saveRestaurant" type="submit" class="image-button">
-                        <img class="serce" src="static/pictures/default-heart.png" alt="Opis obrazka">
-                      </button>
+                      <img class="obraz-karuzela" src="static/pictures/restaurant{{loop.index}}.jpg" alt="Obraz {{ loop.index }}">
+                      <div>
+                            <span class="rest-name">{{ matchedRestaurant['rest_name'] }}</span>
+                            <input type="hidden" name="fav-rest-name" value="{{ matchedRestaurant['rest_name'] }}">
+                            <button name="submitType" value="{{ matchedRestaurant['rest_name'] }}" type="submit" class="btn image-button">
+                                <img class="serce" src="static/pictures/default-heart.png" alt="Opis obrazka">
+                            </button>
+                        </div>
+                        <div class="restaurant-info">
+                            <p>Online order: {{ matchedRestaurant['rest_name'] }}</p>
+                            <p>Book table: {{ matchedRestaurant['book_table'] }}</p>
+                            <p>Rate: {{ matchedRestaurant['rate'] }}</p>
+                            <p>Location: {{ matchedRestaurant['rest_location'] }}</p>
+                            <p>Average cost: {{ matchedRestaurant['cost'] }}</p>
+                        </div>
                   </div>
                   {% endif %}
                   {% endfor %}
             </div>
 
             <ol class="carousel-indicators">
-                  {% for matchedRestaurants in matchedRestaurants %}
+                  {% for matchedRestaurant in matchedRestaurants %}
                   <li data-target="#myCarousel" data-slide-to="{{ loop.index }}" {% if loop.index == 1 %}class="active"{% endif %}></li>
                   {% endfor %}
             </ol>

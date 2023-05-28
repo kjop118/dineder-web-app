@@ -20,7 +20,7 @@
                 {% for preference in preferences %}
                 <table class="table preferences-table">
 
-                    <thead>
+                    <thead class="opis-tabeli">
                         <th>Cuisine</th>
                         <th>Cuisine Importance</th>
                         <th>Price</th>
@@ -31,7 +31,7 @@
                         <th>Distance_importance</th>
                     </thead>
 
-                    <tbody>
+                    <tbody class="kontent-tabeli">
                         <tr>
                             <td>{{ preference['cuisine'] }}</td>
                             <td>{{ preference['cuisine_importance'] }}</td>
@@ -45,10 +45,12 @@
                     </tbody>
                 </table>
                     <form action="" method="POST">
-                        <button name="accountButtonType" value="getLocation" class="btn match-account-btn">MATCH</button>
-                        <input type="hidden" name="preference_id" value="{{ preference['id'] }}">
-                        <button name="accountButtonType" value="deleteFilter" class="btn delete-button" type="submit">DELETE PREFERENCE</button>
-<!--                    <button type="submit" class="btn delete-button" value="{{ preference['id'] }}"  name="delete-button">DELETE PREFERENCE</button>-->
+                        <div class="center-button">
+                            <button name="accountButtonType" value="getLocation" class="btn match-account-btn">MATCH</button>
+                            <input type="hidden" name="preference_id" value="{{ preference['id'] }}">
+                            <button name="accountButtonType" value="deleteFilter" class="btn delete-button" type="submit">DELETE PREFERENCE</button>
+    <!--                    <button type="submit" class="btn delete-button" value="{{ preference['id'] }}"  name="delete-button">DELETE PREFERENCE</button>-->
+                        </div>
                     </form>
             {% endfor %}
 

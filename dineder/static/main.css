@@ -124,14 +124,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .delete-button {
-    background-color: #ee23a7; /* Kolor tła guzika */
+    background-color: #c46500; /* Kolor tła guzika */
     color: white; /* Kolor tekstu w guziku */
     font-size: 20px;
     font-family: 'Neucha', cursive;
     font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
     border-radius: 20px;
+
 }
 
 .delete-button:hover {
@@ -520,7 +521,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .carousel-indicators {
     position: relative;
-    margin-top: 70px;
+    margin-top: 30px;
     left: 0;
     right: 0;
     padding: 0;
@@ -546,10 +547,66 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 40px;
     color: #ffffff;
     font-weight: bold;
+    margin-top: 10px;
 }
 
 .obraz-karuzela {
     width: 700px;
     height: auto;
     border-radius: 20px;
+}
+
+.contact-us {
+    padding: 10px;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    text-align: center;
+    font-size: 15px;
+    margin-top: 40px;
+}
+
+.no-restaurants {
+    font-family: 'Neucha', cursive;
+    font-size: 40px;
+    color: #ffffff;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.restaurant-info {
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.rest-name-container {
+    text-align: right;
+}
+
+.center-button {
+  text-align: center;
+}
+
+.opis-tabeli {
+    background-color: #da802d;
+    text-align: center;
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+    font-weight: bold;
+
+}
+
+.kontent-tabeli {
+    background-color: #e7be90;
+    text-align: center;
+    font-family: 'Neucha', cursive;
+    font-size: 20px;
+}
+
+.preferences-table {
+    margin-top: 20px;
 }

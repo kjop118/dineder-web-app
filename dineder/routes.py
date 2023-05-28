@@ -128,7 +128,6 @@ def favourite():
     userRestaurants = UserRestaurant.query.filter_by(user_id=current_user.id).all()
 
     favRestaurants = []
-    print(len(userRestaurants))
     if len(userRestaurants) > 0:
         for userRestaurant in userRestaurants:
             favRestaurant = Restaurants.query.filter_by(id=userRestaurant.restaurant_id).first()
@@ -155,7 +154,7 @@ def favourite():
         db.session.commit()
         return redirect(url_for('favourite'))
 
-    return render_template('fav-restaurant.html', title='LIKE', favRestaurants=favRestaurants)
+    return render_template('fav-restaurant.html', title='LIKE', favRestaurants=favRestaurants, userRestaurants=userRestaurants)
 
 
 
@@ -244,7 +243,7 @@ def match():
         db.session.commit()
 
         submit_type = request.form.get('submitType')
-        print(submit_type)
+
         if submit_type == 'save':
             preferences = Preferences(cuisine=cuisine, cuisine_importance=cuisine_weight, price=price,
                                       price_importance=price_weight, ratings=ratings, ratings_importance=ratings_weight,
@@ -299,8 +298,10 @@ def match():
                 db.session.commit()
 
             matchedRestaurants = MatchedRestaurants.query.all()
-        elif submit_type == 'saveRestaurant':
-            fav_rest_name = request.form.get('fav-rest-id')
+        else:
+            # {{matchedRestaurant['rest_name']}}
+            fav_rest_name = submit_type
+            print(fav_rest_name)
             restaurant = Restaurants.query.filter_by(rest_name=fav_rest_name).first()
             fav_rest = UserRestaurant(user_id=current_user.id, restaurant_id=restaurant.id)
             db.session.add(fav_rest)
