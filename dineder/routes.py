@@ -158,7 +158,7 @@ def favourite():
 
 
 
-
+#stare, nie używane
 @app.route("/process_match", methods=['POST'])
 def process_match():
     restaurants = Restaurants.query.all()
@@ -229,8 +229,12 @@ def match():
         ratings_weight = int(request.form.get('ratings_weight'))
         distance_weight = int(request.form.get('distance_weight'))
 
+        #jeśli nie ma wartości wpisanych to jest 0 albo ""
+        print("cuisine:" + str(cuisine) + ", cuisine_weight:" + str(cuisine_weight) + ", price:" + str(price) + ", price_weight:" + str(price_weight) + 
+              ", ratings:" + str(ratings) + ", ratings_weight:" + str(ratings_weight) + ", distance:" + str(distance) + ", distance_weight:" + str(distance_weight))
+
         price = price * 10
-        #przypadek do obsluzenia co gdy uzytkonik nie poda rodzaju kuchni
+        #przypadek do obsluzenia co gdy uzytkonik nie poda rodzaju kuchnis
         # if cuisine == "":
         #     print(cuisine)
 
@@ -265,24 +269,48 @@ def match():
             latitude = float(location[0])
             longitude = float(location[1])
 
-            # print("Latitude : ", latitude)
-            # print("Longitude : ", longitude)
+            #50.067821, 19.942883 sze1 dl1
+            #50.071015, 19.932752 sze2 dl2
+            #calculate_distance()
+            #print("Latitude : ", latitude)
+            #print("Longitude : ", longitude)
+
+            latitude = 50.076058
+            longitude = 19.941714
 
             # wyznaczanie wag - które filtry będę uwzględnione jako pierwsze
-            restaurants = Restaurants.query.all()
+            restaurants = Restaurants.query.limit(200).all()
+            #cuisines_restaurants = CuisinesRestaurants.query.all()
             weighted_scores = []
 
             for restaurant in restaurants:
                 score = (
-                    cuisine_weight * calculate_cuisine_score(restaurant.cuisine, cuisine) +
+                    cuisine_weight * calculate_cuisine_score(restaurant.id, cuisine) +
                     price_weight * calculate_price_range_score(restaurant.cost, price) +
                     ratings_weight * calculate_rating_score(restaurant.rate, ratings) +
                     distance_weight * calculate_location_score(restaurant.longitude, restaurant.latitude, longitude, latitude, distance)
                 )
+                #debug -----------
+                # print(restaurant.id)
+                # print("Cuisine: " + str(cuisine_weight * calculate_cuisine_score(restaurant.id, cuisine)))
+                # print(str(cuisine_weight) + "*" + str(calculate_cuisine_score(restaurant.id, cuisine)))
+                # print("Price: " + str(price_weight * calculate_price_range_score(restaurant.cost, price)))
+                # print(str(price_weight) + "*" + str(calculate_price_range_score(restaurant.cost, price)))
+                # print("Rating: " + str(ratings_weight * calculate_rating_score(restaurant.rate, ratings)))
+                # print(str(ratings_weight) + "*" + str(calculate_rating_score(restaurant.rate, ratings)))
+                # print("Distance: " + str(distance_weight * calculate_location_score(restaurant.longitude, restaurant.latitude, longitude, latitude, distance)))
+                # print(str(distance_weight) + "*" + str(calculate_location_score(restaurant.longitude, restaurant.latitude, longitude, latitude, distance)))
+                # print("---------------")
+                #debug -----------
                 weighted_scores.append((restaurant, score))
+                #print(str((restaurant, score)))
 
             sorted_restaurants = sorted(weighted_scores, key=lambda x: x[1], reverse=True)
             top_restaurants = sorted_restaurants[:10]
+
+            for i in top_restaurants:
+                print(str(i[0]) + str(i[1])) 
+                       
 
             results = []
             for match in top_restaurants:
@@ -337,6 +365,8 @@ def match():
 
 
 def calculate_rating_score(rating, user_rating):
+    if user_rating == 0.0:
+        return 0.0
     if rating > user_rating:
         return 0.9
     elif rating == user_rating:
@@ -345,33 +375,57 @@ def calculate_rating_score(rating, user_rating):
         return 0.3
 
 
-def calculate_cuisine_score(cuisine, user_cuisne):
-    if cuisine == user_cuisne:
-        return 0.9
-    else:
-        return 0.5
+def calculate_cuisine_score(restaurant, user_cuisne):
+    cuisine_id = Cuisines.query.filter_by(cuisine=user_cuisne).first()
+    cuisines_restaurants = CuisinesRestaurants.query.filter_by(restaurant_id = restaurant)
+    ret = 0.2
+    for cus_res in cuisines_restaurants:
+        #print(str(cuisine_id.id) + "==" + str(cus_res.cuisine_id))
+        if cuisine_id.id == cus_res.cuisine_id:
+            return 0.9
+    return ret
 
 
 def calculate_price_range_score(price_range, user_price_range):
-    # Implement your own logic to calculate the price range score
-    # This is just a placeholder example
+    if user_price_range == 0.0:
+        return 0.0
     if price_range < user_price_range:
         return 0.9
     elif price_range == user_price_range:
         return 0.8
     else:
-        return 0.4
+        return 0.3
 
 
 def calculate_location_score(rest_longitude, rest_latitude, user_longitude, user_latitude, allowed_distance):
     # Implement your own logic to calculate the location score
     # This is just a placeholder example
-    distance = calculate_distance(rest_longitude, rest_latitude, user_longitude, user_latitude)
 
+    # 50.075959, 19.941666
+    #print("Rest: " + str(rest_longitude) + " " + str(rest_latitude))
+    #print("User: " + str(user_longitude) + " " + str(user_latitude))
+
+
+    distance = calculate_distance(rest_longitude, rest_latitude, user_longitude, user_latitude)
+    #print("Distance: " + str(distance))
+
+    if allowed_distance == 0.0:
+        return 0.0
+    
+    if allowed_distance  > distance:
+        return 0.9
+    
+    if allowed_distance + 2.0 > distance:
+        return 0.7
+    
+    if allowed_distance < distance:
+        return 0.3
+
+    # czemu tu było normalizowanie? 
     # Normalize the distance value to a score between 0 and 1
-    max_distance = allowed_distance  # Maximum distance considered acceptable
-    normalized_distance = 1.0 - (distance / max_distance)
-    return normalized_distance
+    # max_distance = allowed_distance  # Maximum distance considered acceptable
+    # normalized_distance = 1.0 - (distance / max_distance)
+    # return normalized_distance
 
 
 def calculate_distance(lon1, lat1, lon2, lat2):
