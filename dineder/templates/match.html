@@ -383,7 +383,7 @@
                             <p>Book table: {{ matchedRestaurant['book_table'] }}</p>
                             <p>Rate: {{ matchedRestaurant['rate'] }}</p>
                             <p>Location: {{ matchedRestaurant['rest_location'] }}</p>
-                            <p>Average cost: {{ matchedRestaurant['cost'] }}</p>
+                            <p>Average cost: {{ matchedRestaurant['cost']/10 }}</p>
                         </div>
                     </div>
                   {% else %}
@@ -403,7 +403,7 @@
                             <p>Book table: {{ matchedRestaurant['book_table'] }}</p>
                             <p>Rate: {{ matchedRestaurant['rate'] }}</p>
                             <p>Location: {{ matchedRestaurant['rest_location'] }}</p>
-                            <p>Average cost: {{ matchedRestaurant['cost'] }}</p>
+                            <p>Average cost: {{ matchedRestaurant['cost']/10 }}</p>
                         </div>
                   </div>
                   {% endif %}

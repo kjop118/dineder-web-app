@@ -229,6 +229,7 @@ def match():
         ratings_weight = int(request.form.get('ratings_weight'))
         distance_weight = int(request.form.get('distance_weight'))
 
+        price = price * 10
         #przypadek do obsluzenia co gdy uzytkonik nie poda rodzaju kuchni
         # if cuisine == "":
         #     print(cuisine)
@@ -245,7 +246,12 @@ def match():
         submit_type = request.form.get('submitType')
 
         if submit_type == 'save':
-            preferences = Preferences(cuisine=cuisine, cuisine_importance=cuisine_weight, price=price,
+            if price==0:
+                price = price
+            else:
+                price=price/10
+
+            preferences = Preferences(cuisine=cuisine, cuisine_importance=cuisine_weight, price=price/10,
                                       price_importance=price_weight, ratings=ratings, ratings_importance=ratings_weight,
                                       distance=distance, distance_importance=distance_weight, user_id=current_user.id)
             db.session.add(preferences)
@@ -269,7 +275,7 @@ def match():
             for restaurant in restaurants:
                 score = (
                     cuisine_weight * calculate_cuisine_score(restaurant.cuisine, cuisine) +
-                    price_weight * calculate_price_range_score(restaurant.cost, price/10) +
+                    price_weight * calculate_price_range_score(restaurant.cost, price) +
                     ratings_weight * calculate_rating_score(restaurant.rate, ratings) +
                     distance_weight * calculate_location_score(restaurant.longitude, restaurant.latitude, longitude, latitude, distance)
                 )
