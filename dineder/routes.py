@@ -159,58 +159,58 @@ def favourite():
 
 
 
-# @app.route("/process_match", methods=['POST'])
-# def process_match():
-#     restaurants = Restaurants.query.all()
-#
-#     data = request.get_json()
-#     #print(data)
-#     user_location_lat = float(data['user_location_lat'])
-#     user_location_long = float(data['user_location_long'])
-#     cuisine = data['cuisine']
-#     cuisine_w = int(data['cuisene_w'])
-#     rating = float(data['rating'])
-#     rating_w = int(data['rating_w'])
-#     price = ""
-#     if (data['price'] == 'powyżej'):
-#         price = 10000000
-#     else:
-#         price = float(data['price'])
-#         price = price*10
-#     price_w = int(data['price_w'])
-#     allowed_distance = ""
-#     if (data['allowed_distance'] == 'powyżej'):
-#         allowed_distance = 10000000
-#     else:
-#         allowed_distance = float(data['allowed_distance'])
-#
-#     allowed_distance_w = int(data['allowed_distance_w'])
-#
-#     weighted_scores = []
-#     for restaurant in restaurants:
-#         score = (
-#             cuisine_w * calculate_cuisine_score(restaurant.cuisine, cuisine) +
-#             price_w * calculate_price_range_score(restaurant.cost, price) +
-#             rating_w * calculate_rating_score(restaurant.rate, rating) +
-#             allowed_distance_w* calculate_location_score(restaurant.longitude, restaurant.latitude, user_location_long, user_location_lat, allowed_distance)
-#         )
-#         weighted_scores.append((restaurant, score))
-#
-#     sorted_restaurants = sorted(weighted_scores, key=lambda x: x[1], reverse=True)
-#
-#     top_restaurants = sorted_restaurants[:10]
-#
-#     output = []
-#     for restaurant, score in top_restaurants:
-#         output.append(f"Restaurant: {restaurant.rest_name}, Score: {score}")
-#
-#     for i in output:
-#         print(i)
-#
-#     if len(output) == 0:
-#         print("Nie ma dopasowań")
-#
-#     return '\n'.join(output)
+@app.route("/process_match", methods=['POST'])
+def process_match():
+    restaurants = Restaurants.query.all()
+
+    data = request.get_json()
+    #print(data)
+    user_location_lat = float(data['user_location_lat'])
+    user_location_long = float(data['user_location_long'])
+    cuisine = data['cuisine']
+    cuisine_w = int(data['cuisene_w'])
+    rating = float(data['rating'])
+    rating_w = int(data['rating_w'])
+    price = ""
+    if (data['price'] == 'powyżej'):
+        price = 10000000
+    else:
+        price = float(data['price'])
+        price = price*10
+    price_w = int(data['price_w'])
+    allowed_distance = ""
+    if (data['allowed_distance'] == 'powyżej'):
+        allowed_distance = 10000000
+    else:
+        allowed_distance = float(data['allowed_distance'])
+
+    allowed_distance_w = int(data['allowed_distance_w'])
+
+    weighted_scores = []
+    for restaurant in restaurants:
+        score = (
+            cuisine_w * calculate_cuisine_score(restaurant.cuisine, cuisine) +
+            price_w * calculate_price_range_score(restaurant.cost, price) +
+            rating_w * calculate_rating_score(restaurant.rate, rating) +
+            allowed_distance_w* calculate_location_score(restaurant.longitude, restaurant.latitude, user_location_long, user_location_lat, allowed_distance)
+        )
+        weighted_scores.append((restaurant, score))
+
+    sorted_restaurants = sorted(weighted_scores, key=lambda x: x[1], reverse=True)
+
+    top_restaurants = sorted_restaurants[:10]
+
+    output = []
+    for restaurant, score in top_restaurants:
+        output.append(f"Restaurant: {restaurant.rest_name}, Score: {score}")
+
+    for i in output:
+        print(i)
+
+    if len(output) == 0:
+        print("Nie ma dopasowań")
+
+    return '\n'.join(output)
 
 
 @app.route("/match", methods=['GET', 'POST'])
@@ -311,9 +311,11 @@ def match():
                     else:
                         restaurantCuisines = restaurantCuisines + ", " + cuisine.cuisine
 
+                distance_to_restaurant = calculate_distance(match.longitude, match.latitude, longitude, latitude)
+
                 matchedRestaurant = MatchedRestaurants(rest_name=match.rest_name, online_order=match.online_order,
                     book_table=match.book_table, rate=match.rate, votes=match.votes, rest_location=match.rest_location,
-                    cost=match.cost, longitude=match.longitude, latitude=match.latitude, cuisines=restaurantCuisines)
+                    cost=match.cost, longitude=match.longitude, latitude=match.latitude, cuisines=restaurantCuisines, distance=distance_to_restaurant)
                 db.session.add(matchedRestaurant)
                 db.session.commit()
 
