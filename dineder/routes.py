@@ -79,7 +79,7 @@ def account():
     clearMatchChoice()
     clearMatchRestaurants()
 
-    preferences = Preferences.query.all()
+    preferences = Preferences.query.filter_by(user_id = current_user.id).all()
     if request.method == 'POST':
         preference_id = request.form.get('preference_id')
         preference = Preferences.query.get_or_404(preference_id)
