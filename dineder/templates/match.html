@@ -371,10 +371,12 @@
                       <img class="obraz-karuzela" src="static/pictures/restaurant{{loop.index}}.jpg" alt="Obraz {{ loop.index }}">
                         <div>
                             <span class="rest-name">{{ matchedRestaurant['rest_name'] }}</span>
+                            {% if current_user.is_authenticated %}
                             <input type="hidden" name="fav-rest-name" value="{{ matchedRestaurant['rest_name'] }}">
                             <button name="submitType" value="{{ matchedRestaurant['rest_name'] }}" type="submit" class="btn image-button">
                                 <img class="serce" src="static/pictures/default-heart.png" alt="Opis obrazka">
                             </button>
+                            {% endif %}
                         </div>
                         <div class="restaurant-info">
                             <p>Online order: {{ matchedRestaurant['rest_name'] }}</p>
@@ -389,10 +391,12 @@
                       <img class="obraz-karuzela" src="static/pictures/restaurant{{loop.index}}.jpg" alt="Obraz {{ loop.index }}">
                       <div>
                             <span class="rest-name">{{ matchedRestaurant['rest_name'] }}</span>
+                            {% if current_user.is_authenticated %}
                             <input type="hidden" name="fav-rest-name" value="{{ matchedRestaurant['rest_name'] }}">
                             <button name="submitType" value="{{ matchedRestaurant['rest_name'] }}" type="submit" class="btn image-button">
                                 <img class="serce" src="static/pictures/default-heart.png" alt="Opis obrazka">
                             </button>
+                            {% endif %}
                         </div>
                         <div class="restaurant-info">
                             <p>Online order: {{ matchedRestaurant['rest_name'] }}</p>
