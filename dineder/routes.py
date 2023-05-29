@@ -233,7 +233,7 @@ def match():
         print("cuisine:" + str(cuisine) + ", cuisine_weight:" + str(cuisine_weight) + ", price:" + str(price) + ", price_weight:" + str(price_weight) + 
               ", ratings:" + str(ratings) + ", ratings_weight:" + str(ratings_weight) + ", distance:" + str(distance) + ", distance_weight:" + str(distance_weight))
 
-        price = price * 10
+        # price = price * 10
         #przypadek do obsluzenia co gdy uzytkonik nie poda rodzaju kuchnis
         # if cuisine == "":
         #     print(cuisine)
@@ -250,12 +250,7 @@ def match():
         submit_type = request.form.get('submitType')
 
         if submit_type == 'save':
-            if price==0:
-                price = price
-            else:
-                price=price/10
-
-            preferences = Preferences(cuisine=cuisine, cuisine_importance=cuisine_weight, price=price/10,
+            preferences = Preferences(cuisine=cuisine, cuisine_importance=cuisine_weight, price=price,
                                       price_importance=price_weight, ratings=ratings, ratings_importance=ratings_weight,
                                       distance=distance, distance_importance=distance_weight, user_id=current_user.id)
             db.session.add(preferences)
@@ -275,8 +270,8 @@ def match():
             #print("Latitude : ", latitude)
             #print("Longitude : ", longitude)
 
-            latitude = 50.076058
-            longitude = 19.941714
+            # latitude = 50.076058
+            # longitude = 19.941714
 
             # wyznaczanie wag - które filtry będę uwzględnione jako pierwsze
             restaurants = Restaurants.query.limit(200).all()
@@ -286,7 +281,7 @@ def match():
             for restaurant in restaurants:
                 score = (
                     cuisine_weight * calculate_cuisine_score(restaurant.id, cuisine) +
-                    price_weight * calculate_price_range_score(restaurant.cost, price) +
+                    price_weight * calculate_price_range_score(restaurant.cost, price*10) +
                     ratings_weight * calculate_rating_score(restaurant.rate, ratings) +
                     distance_weight * calculate_location_score(restaurant.longitude, restaurant.latitude, longitude, latitude, distance)
                 )
@@ -348,7 +343,6 @@ def match():
                 db.session.commit()
 
             matchedRestaurants = MatchedRestaurants.query.all()
-
         else:
             # {{matchedRestaurant['rest_name']}}
             fav_rest_name = submit_type
@@ -358,6 +352,7 @@ def match():
             db.session.add(fav_rest)
             db.session.commit()
             return redirect(url_for('favourite'))
+
 
         return redirect(url_for('match'))
 
