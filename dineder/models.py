@@ -104,6 +104,7 @@ class MatchedRestaurants(db.Model):
     cost = db.Column(db.Float)
     longitude = db.Column(db.Float)
     latitude = db.Column(db.Float)
+    cuisines = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
         return '<Matched Restaurant %r>' % self.rest_name

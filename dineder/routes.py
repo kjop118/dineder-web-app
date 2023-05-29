@@ -297,13 +297,28 @@ def match():
             #zapis wyniku do bazy
             for restaurant in results:
                 match = Restaurants.query.filter_by(id=restaurant.id).first()
+                restaurantCuisines = match.cuisine
+
+                cuisines = []
+                for restaurantCuisine in restaurantCuisines:
+                    cuisine_id = restaurantCuisine.cuisine_id
+                    cuisines.append(Cuisines.query.get(cuisine_id))
+
+                restaurantCuisines = ""
+                for cuisine in cuisines:
+                    if restaurantCuisines == "":
+                        restaurantCuisines = cuisine.cuisine
+                    else:
+                        restaurantCuisines = restaurantCuisines + ", " + cuisine.cuisine
+
                 matchedRestaurant = MatchedRestaurants(rest_name=match.rest_name, online_order=match.online_order,
                     book_table=match.book_table, rate=match.rate, votes=match.votes, rest_location=match.rest_location,
-                    cost=match.cost, longitude=match.longitude, latitude=match.latitude)
+                    cost=match.cost, longitude=match.longitude, latitude=match.latitude, cuisines=restaurantCuisines)
                 db.session.add(matchedRestaurant)
                 db.session.commit()
 
             matchedRestaurants = MatchedRestaurants.query.all()
+
         else:
             # {{matchedRestaurant['rest_name']}}
             fav_rest_name = submit_type
